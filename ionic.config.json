@@ -1,0 +1,7 @@
+{
+  "name": "dnd-companion",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

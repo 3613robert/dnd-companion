@@ -1,0 +1,93 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+  <ion-buttons slot="end">
+    <ion-button (click)="openUaDnd()">5e tools
+      <ion-icon name="diamond"></ion-icon>
+    </ion-button>
+    <ion-button (click)="openMenu()">Unearthed Arcana</ion-button>
+    <ion-button (click)="openMenu()">Class</ion-button>
+    <ion-button (click)="toggleDice()">Dice Roller</ion-button>
+  </ion-buttons>
+  <ion-title id="title">Main menu</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Main Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+    <ion-button id="char" expand="full" (click)="toggleCharView()">Character Overview</ion-button>
+  @if (showCharOverview) {
+    <ul>
+  @for (stat of stats; track stat) {
+    <li>
+      <div id="statblock">
+        <ion-button  
+        color="none" 
+        id={{stat}}-2>
+        </ion-button>
+          <ul id="ulskills">
+            @for (skill of skills[stat]; track skill) {
+              <li id={{stat}}>{{ skill }} {{'(  )'}}</li>
+            }
+          </ul>
+      </div>
+    </li>
+  }
+</ul>
+  } 
+  @if (showDiceList){
+    <ion-grid>
+      <ion-row>
+        <ion-col size="1">    
+            <ion-button id="dice" (click)="rollDice(20, 0)">Roll D20</ion-button>
+        </ion-col>
+          <ion-col size="1">
+            <p> Result: {{ diceResult[0]}} </p>
+          </ion-col>
+      </ion-row>
+      <ion-row >
+        <ion-col size="1">
+          <ion-button id="dice" (click)="rollDice(12, 1)">Roll D12</ion-button>
+        </ion-col>
+        <ion-col size="1">
+          <p> Result: {{ diceResult[1]}} </p>
+        </ion-col>
+      </ion-row>
+      <ion-row >
+        <ion-col size="1">
+          <ion-button id="dice" (click)="rollDice(10, 2)">Roll D10</ion-button>
+        </ion-col>
+        <ion-col size="1">
+          <p> Result: {{ diceResult[2]}} </p>
+        </ion-col>
+        </ion-row>
+        <ion-row >
+          <ion-col size="1">
+            <ion-button id="dice" (click)="rollDice(8, 3)">Roll D8</ion-button>
+          </ion-col>
+          <ion-col size="1">
+            <p> Result: {{ diceResult[3]}} </p>
+          </ion-col>
+        </ion-row>
+        <ion-row >
+          <ion-col size="1">
+            <ion-button id="dice" (click)="rollDice(6, 4)">Roll D6</ion-button>
+          </ion-col>
+          <ion-col size="1">
+            <p> Result: {{ diceResult[4]}} </p>
+          </ion-col>
+        </ion-row>
+        <ion-row >
+          <ion-col size="1">
+            <ion-button id="dice" (click)="rollDice(4, 5)">Roll D4</ion-button>
+          </ion-col>
+          <ion-col size="1">
+            <p> Result: {{ diceResult[5]}} </p>
+          </ion-col>
+        </ion-row>
+    </ion-grid>
+  }
+</ion-content>

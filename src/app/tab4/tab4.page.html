@@ -1,0 +1,86 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Character creation    
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="startCharacterCreation()">New Character</ion-button>
+      <ion-icon name="diamond"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ng-container [ngSwitch]="currentStep">
+
+    <!-- Menu -->
+    <ng-container *ngSwitchCase="'menu'">
+      <!-- Empty or menu content here -->
+    </ng-container>
+
+    <!-- Class Selection -->
+    <ng-container *ngSwitchCase="'class'">
+      <h2>Select Class</h2>
+
+      <ion-select (ionChange)="onClassChange($event)" [(ngModel)]="selectedClass">
+        <ion-select-option *ngFor="let class of classKeys" [value]="class">
+          {{ class }}
+        </ion-select-option>
+      </ion-select>
+
+      <ion-card tag="CCCard" *ngIf="selectedClass">
+        <ion-card-header>
+          <ion-card-title>{{char_name}}</ion-card-title>
+        </ion-card-header>
+        <ion-img style.max-height="200px" tag ="CCImage" [src]="selectedClassData[char_name].src"></ion-img>
+        <ion-card-content>
+          <ion-card-title></ion-card-title>
+          <ion-card-text tag="CCDescription">{{currentClassText}}</ion-card-text>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-button tag="CCButton" (click)="goToRace()">
+        Next
+      </ion-button>
+    </ng-container>
+
+    <!-- Race Selection -->
+    <ng-container *ngSwitchCase="'race'">
+      <h2>Select Race</h2>
+
+      <ion-select [(ngModel)]="character.race" style="max-width: 400px;">
+        <ion-select-option *ngFor="let race of raceNames" [value]="race">
+          {{ race }}
+        </ion-select-option>
+      </ion-select>
+
+      <ion-button tag="CCButton" (click)="goToStats()">
+        Next
+      </ion-button>
+    </ng-container>
+
+    <!-- Stats (commented out) -->
+    <!--
+    <ng-container *ngSwitchCase="'stats'">
+      <h2>Ability Scores</h2>
+      <ion-button expand="full" (click)="goToSummary()">
+        Finish
+      </ion-button>
+    </ng-container>
+    -->
+
+    <!-- Summary -->
+    <ng-container *ngSwitchCase="'summary'">
+      <h2>Character Summary</h2>
+      <p>Class: {{ selectedClass }}</p>
+      <p>Race: {{ character.race }}</p>
+
+      <ion-button expand="full" (click)="backToMenu()">
+        Done
+      </ion-button>
+    </ng-container>
+
+  </ng-container>
+
+</ion-content>
