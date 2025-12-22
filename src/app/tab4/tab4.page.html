@@ -15,9 +15,6 @@
   <ng-container [ngSwitch]="currentStep">
 
     <!-- Menu -->
-    <ng-container *ngSwitchCase="'menu'">
-      <!-- Empty or menu content here -->
-    </ng-container>
 
     <!-- Class Selection -->
     <ng-container *ngSwitchCase="'class'">
@@ -31,9 +28,9 @@
 
       <ion-card tag="CCCard" *ngIf="selectedClass">
         <ion-card-header>
-          <ion-card-title>{{char_name}}</ion-card-title>
+          <ion-card-title class="ion-text-center">{{char_name}}</ion-card-title>
         </ion-card-header>
-        <ion-img style.max-height="200px" tag ="CCImage" [src]="selectedClassData[char_name].src"></ion-img>
+        <ion-img tag ="CCImage" [src]="selectedClassData[char_name].src"></ion-img>
         <ion-card-content>
           <ion-card-title></ion-card-title>
           <ion-card-text tag="CCDescription">{{currentClassText}}</ion-card-text>
@@ -123,7 +120,7 @@
           </ion-col>
 
           <ion-col size="2" class="ion-text-center">
-            <strong>{{ stat.value }}</strong>
+            <strong>{{ stat.value }} {{ }}</strong>
           </ion-col>
 
           <ion-col size="2">
@@ -152,8 +149,19 @@
       <h2>Your Character:</h2>
       <ion-grid>
         <ion-row *ngFor="let entry of character | keyvalue" class="ion-align-items-center">
-          <ion-col *ngIf="entry.key !== 'stats'" size="4">
-            <ion-label>{{entry.key}}</ion-label>
+          <ion-col *ngIf="entry.key !== 'stats'" size="2">
+            <ion-label>{{entry.key}}:</ion-label>
           </ion-col>
-          <ion-col *ngIf="entry.key !== 'stats'">{{entry.value}}</ion-col>
+          <ion-col *ngIf="entry.key !== 'stats'" size="4">
+            <ion-label>{{entry.value}}</ion-label>
+          </ion-col>
         </ion-row>
+      </ion-grid>
+    </ng-container>
+    <ng-container>
+      <div *ngSwitchCase="'summary'">
+        <ul tag="CCStats"> <strong>Stats:</strong> 
+          <li tag="CCStats" *ngFor="let stat of character.stats">{{ stat.name }}: {{ stat.value }}</li>
+        </ul>
+      </div>
+    </ng-container>

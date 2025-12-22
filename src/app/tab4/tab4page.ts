@@ -15,14 +15,20 @@ import textrace from 'src/assets/race/race.json'
 import backgrounds from 'src/assets/backgrounds/backgrounds.json'
 import textbackground from 'src/assets/backgrounds/backgroundstext.json'
 
-type character = {
+type Stat = {
+  name: string;
+  value: number;
+};
+
+type Character = {
   name: string;
   class: string;
   race: string;
   background: string;
-  stats: string;
-}
-  
+  stats: Stat[];
+  proficiencies: string[];
+};
+
 type Class = {
   [key:string]: unknown;
 }
@@ -145,7 +151,7 @@ export class Tab4Page {
   raceKeys = Object.keys(this.raceNames)
   raceListDetail = this.raceNames.map(cls =>({[cls]: {src: `/assets/race/${cls}.png`, text: "text input", features: "features input"}}))
 
-  selectedRace?: keyof typeof this.raceListDetail;
+  selectedRace?: string;
   RaceName?: keyof typeof this.selectedRace;
 
   race_name = ""; 
@@ -176,20 +182,20 @@ export class Tab4Page {
   }
 
 // --- Character ----
-  character = {
+  character: Character = {
     name: '',
     class: '',
     race: '',
+    background: '',
     stats: [
-    { name: 'Strength', value: 8 },
-    { name: 'Dexterity', value: 8 },
-    { name: 'Constitution', value: 8 },
-    { name: 'Wisdom', value: 8 },
-    { name: 'Intelligence', value: 8 },
-    { name: 'Charisma', value: 8 },
+      { name: 'Strength', value: 8 },
+      { name: 'Dexterity', value: 8 },
+      { name: 'Constitution', value: 8 },
+      { name: 'Wisdom', value: 8 },
+      { name: 'Intelligence', value: 8 },
+      { name: 'Charisma', value: 8 },
     ],
     proficiencies: [],
-    background: "",
   };
 
   characterKeys = Object.keys(this.character);
@@ -208,6 +214,21 @@ export class Tab4Page {
 
   totalPoints = 27;
 
+  modifierStat(score: number): number {
+    if (score >= 8 && score < 10) return -1;
+    if (score >= 10 && score < 12) return 0;
+    if (score >= 12 && score < 14) return 1;
+    if (score >= 14 && score < 16) return 2;
+    if (score >= 16 && score < 18) return 3;
+    if (score >=18 && score <20) return 4;
+    if (score >= 20) return 5;
+    return 0;
+  }
+
+  showModifier(): number {
+    
+  }
+
   pointCost(score: number): number {
     if (score <= 13) return score - 8;
     if (score === 14) return 7;
@@ -216,13 +237,13 @@ export class Tab4Page {
   }
 
   usedPoints(): number {
-    return this.stats.reduce(
+    return this.character.stats.reduce(
       (sum, stat) => sum + this.pointCost(stat.value),
       0
     );
   }
 
-  canIncrease(stat: any): boolean {
+  canIncrease(stat: Stat): boolean {
     if (stat.value >= 15) return false;
     return this.usedPoints() + this.pointCost(stat.value + 1) - this.pointCost(stat.value) <= this.totalPoints;
   }
@@ -231,23 +252,22 @@ export class Tab4Page {
     return stat.value > 8;
   }
 
-  increase(stat: any) {
+  increase(stat: Stat) {
     if (this.canIncrease(stat)) stat.value++;
   }
 
-  decrease(stat: any) {
+  decrease(stat: Stat) {
     if (this.canDecrease(stat)) stat.value--;
   }
   
-  addBg(fstat: any, sstat:any) {
-    for (let i = 0; i < this.stats.length; i++) {
-      if (this.stats[i].name === fstat) {
-        this.stats[i].value++;
-        this.stats[i].value++;
-        };
-      if (this.stats[i].name === sstat) {this.stats[i].value++};
+  addBg(fstat: string, sstat: string) {
+    for (const stat of this.character.stats) {
+      if (stat.name === fstat) stat.value += 2;
+      if (stat.name === sstat) stat.value += 1;
     }
   }
+
+
 
   // -- Character Creation ----
 
