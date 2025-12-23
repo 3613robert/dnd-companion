@@ -16,7 +16,7 @@ ion-title {
 
 
 ion-button {
-        text-align: right;
+        text-align: center;
         &#char{
             --background: orange;
             color: black;
@@ -25,6 +25,7 @@ ion-button {
         &#dice{
             --background: orange;
             color: black;
+            
         }
         &#Strength-2{
             background-image: url('/assets/icon/29._Traits_Ideals_Bonds_and_Flaws.png');
@@ -98,7 +99,7 @@ li {
   display: none;
 }
 ion-grid {
-    --ion-grid-columns: 12;
+    --ion-grid-columns: 6;
     --ion-grid-column-padding: 10px;
     --ion-grid-padding: 20px;
 }

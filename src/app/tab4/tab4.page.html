@@ -21,139 +21,148 @@
 
     <!-- Class Selection -->
     <ng-container *ngSwitchCase="'class'">
-      <h2>Select Class</h2>
+    <h2>Select Class</h2>
 
-      <ion-select (ionChange)="onClassChange($event)" [(ngModel)]="selectedClass">
-        <ion-select-option *ngFor="let class of classKeys" [value]="class">
-          {{ class }}
+      <ion-select [(ngModel)]="selectedClass" (ionChange)="onClassChange($event)">
+        <ion-select-option *ngFor="let cls of classKeys" [value]="cls">
+          {{ cls }}
         </ion-select-option>
       </ion-select>
 
-      <ion-card tag="CCCard" *ngIf="selectedClass">
-        <ion-card-header>
-          <ion-card-title>{{char_name}}</ion-card-title>
-        </ion-card-header>
-        <ion-img style.max-height="200px" tag ="CCImage" [src]="selectedClassData[char_name].src"></ion-img>
+      <ion-card *ngIf="selectedClass">
+        <ion-img [src]="classData[selectedClass].src"></ion-img>
         <ion-card-content>
-          <ion-card-title></ion-card-title>
-          <ion-card-text tag="CCDescription">{{currentClassText}}</ion-card-text>
+          {{ classText[classIndex] }}
         </ion-card-content>
       </ion-card>
 
-      <ion-button tag="CCButton" (click)="goToRace()">Next</ion-button>
+      <ion-button (click)="goToRace()">Next</ion-button>
     </ng-container>
+
 
     <!-- Race Selection -->
     <ng-container *ngSwitchCase="'race'">
       <h2>Select Race</h2>
 
-      <ion-select (ionChange)="onRaceChange($event)" [(ngModel)]="selectedRace" style="max-width: 400px;">
+      <ion-select [(ngModel)]="selectedRace" (ionChange)="onRaceChange($event)">
         <ion-select-option *ngFor="let race of raceNames" [value]="race">
           {{ race }}
         </ion-select-option>
       </ion-select>
 
-      <ion-card tag="CCCard" *ngIf="selectedRace">
-        <ion-card-header>
-          <ion-card-title>{{race_name}}</ion-card-title>
-        </ion-card-header>
-        <ion-img style.max-height="200px" tag ="CCImage" [src]="selectedRaceData[race_name].src"></ion-img>
+      <ion-card *ngIf="selectedRace">
+        <ion-img [src]="raceData[selectedRace].src"></ion-img>
         <ion-card-content>
-          <ion-card-title></ion-card-title>
-          <ion-card-text tag="CCDescription">{{currentRaceText}}</ion-card-text>
+          {{ raceText[raceIndex] }}
         </ion-card-content>
       </ion-card>
-      <ion-button tag="CCButton" (click)="startCharacterCreation()">Back to Class </ion-button>
-      <ion-button tag="CCButton" (click)="goToBackground()">Choose Background</ion-button>
+
+      <ion-button (click)="goToClass()">Back</ion-button>
+      <ion-button (click)="goToBackground()">Next</ion-button>
     </ng-container>
 
     <!-- Background -->
     <ng-container *ngSwitchCase="'backgrounds'">
-      <h2>Select your background</h2>
-      <ion-select (ionChange)="onBackgroundChange($event)" [(ngModel)]="selectedBackground" style="max-width: 400px;">
-        <ion-select-option *ngFor="let background of backgroundNames" [value]="background">
-          {{background}}
-        </ion-select-option>
-      </ion-select>
+    <h2>Select Background</h2>
 
-      <ion-card tag="CCCard" *ngIf="selectedBackground">
-        <ion-card-header>
-          <ion-card-title>{{background_name}}</ion-card-title>
-        </ion-card-header>
-        <ion-img style.max-height="200px" tag ="CCImage" [src]="selectedBackgroundData[background_name].src"></ion-img>
-        <ion-card-content>
-          <ion-card-title></ion-card-title>
-          <ion-card-text tag="CCDescription">{{currentBackgroundText}}</ion-card-text>
-          <ion-note><br><br>Choose which stat gets +2</ion-note>
-          <ion-select (ionChange)="onbgStatChange($event)" [(ngModel)]="selectedFirstBgStat">
-            <ion-select-option *ngFor="let ability of bgAbilitiesChoices" [value]="ability"> {{ability}}</ion-select-option>
-          </ion-select>
-          <ion-select (ionChange)="onSecondBgStatChange($event)" [(ngModel)]="selectedSecondBgStat" *ngIf="selectedFirstBgStat">
-            <ion-select-option *ngFor="let remainingability of bgAbilitiesChoicesRemaining" [value]="remainingability">{{remainingability}}</ion-select-option>
-          </ion-select>
-        </ion-card-content>
-      </ion-card>
-      <ion-button tag="CCButton" (click)="goToRace()">Back to Race </ion-button>
-      <ion-button tag="CCButton" (click)="goToStats()">Next</ion-button>
-    </ng-container>
+    <ion-select [(ngModel)]="selectedBackground" (ionChange)="onBackgroundChange($event)">
+      <ion-select-option *ngFor="let bg of backgroundNames" [value]="bg">
+        {{ bg }}
+      </ion-select-option>
+    </ion-select>
 
-    <!-- Ability Scores -->
-    <ng-container *ngSwitchCase="'stats'">
-      <h2>Ability Scores</h2>
+    <ion-card *ngIf="selectedBackground">
+      <ion-card-content>
+        {{ backgroundData[selectedBackground].text }}
 
-      <ion-note>
-        Points remaining: {{ totalPoints - usedPoints() }}
-      </ion-note>
+        <ion-note class="ion-margin-top">Choose +2 stat</ion-note>
+        <ion-select [(ngModel)]="selectedFirstBgStat">
+          <ion-select-option *ngFor="let stat of bgAbilityChoices[selectedBackground]" [value]="stat">
+            {{ stat }}
+          </ion-select-option>
+        </ion-select>
 
-      <ion-grid>
-        <ion-row *ngFor="let stat of stats" class="ion-align-items-center">
-          
-          <ion-col size="4">
-            <ion-label>{{ stat.name }}</ion-label>
-          </ion-col>
+        <ion-note *ngIf="selectedFirstBgStat">Choose +1 stat</ion-note>
+        <ion-select *ngIf="selectedFirstBgStat" [(ngModel)]="selectedSecondBgStat">
+          <ion-select-option
+            *ngFor="let stat of remainingBgStats"
+            [value]="stat">
+            {{ stat }}
+          </ion-select-option>
+        </ion-select>
+      </ion-card-content>
+    </ion-card>
 
-          <ion-col size="2">
-            <ion-button
-              size="small"
-              fill="outline"
-              (click)="decrease(stat)"
-              [disabled]="!canDecrease(stat)">
-              −
-            </ion-button>
-          </ion-col>
+    <ion-button (click)="goToRace()">Back</ion-button>
+    <ion-button (click)="goToStats()">Next</ion-button>
+  </ng-container>
 
-          <ion-col size="2" class="ion-text-center">
-            <strong>{{ stat.value }}</strong>
-          </ion-col>
+  <ng-container *ngSwitchCase="'stats'">
+    <h2>Ability Scores</h2>
 
-          <ion-col size="2">
-            <ion-button
-              size="small"
-              fill="outline"
-              (click)="increase(stat)"
-              [disabled]="!canIncrease(stat)">
-              +
-            </ion-button>
-          </ion-col>
+    <ion-note>
+      Points remaining: {{ totalPoints - usedPoints() }}
+    </ion-note>
 
-          <ion-col size="2">
-            <ion-note>
-              {{ pointCost(stat.value) }} pts
-            </ion-note>
-          </ion-col>
+    <ion-grid>
+      <ion-row *ngFor="let stat of character.stats">
+        <ion-col size="4">{{ stat.name }}</ion-col>
 
-        </ion-row>
-      </ion-grid>
-    <ion-button tag="CCButton" (click)="goToBackground()">Back to Background </ion-button>
-    <ion-button tag="CCButton" (click)="onStatsFinal()">Finalize Stats</ion-button>
-    </ng-container>
-    <!-- Summary -->
-    <ng-container *ngSwitchCase="'summary'">
-      <h2>Your Character:</h2>
-      <ion-grid>
-        <ion-row *ngFor="let entry of character | keyvalue" class="ion-align-items-center">
-          <ion-col *ngIf="entry.key !== 'stats'" size="4">
-            <ion-label>{{entry.key}}</ion-label>
-          </ion-col>
-          <ion-col *ngIf="entry.key !== 'stats'">{{entry.value}}</ion-col>
-        </ion-row>
+        <ion-col size="2">
+          <ion-button size="small" (click)="decrease(stat)" [disabled]="!canDecrease(stat)">−</ion-button>
+        </ion-col>
+
+        <ion-col size="2" class="ion-text-center">
+          {{ stat.value }}
+        </ion-col>
+
+        <ion-col size="2">
+          <ion-button size="small" (click)="increase(stat)" [disabled]="!canIncrease(stat)">+</ion-button>
+        </ion-col>
+
+        <ion-col size="2">
+          {{ pointCost(stat.value) }} pts
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-button (click)="goToBackground()">Back</ion-button>
+    <ion-button (click)="finalizeStats()">Next</ion-button>
+  </ng-container>
+
+
+
+  <ng-container *ngSwitchCase="'summary'">
+    <h2>Your Character</h2>
+
+    <ion-list>
+      <ion-item>
+        <ion-label>Name</ion-label>
+        <ion-text>{{ character.name || '—' }}</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Class</ion-label>
+        <ion-text>{{ character.class }}</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Race</ion-label>
+        <ion-text>{{ character.race }}</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Background</ion-label>
+        <ion-text>{{ character.background }}</ion-text>
+      </ion-item>
+    </ion-list>
+
+    <h3>Stats</h3>
+    <ion-list>
+      <ion-item *ngFor="let stat of character.stats">
+        <ion-label>{{ stat.name }}</ion-label>
+        <ion-text>{{ stat.value }}</ion-text>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+</ng-container>
