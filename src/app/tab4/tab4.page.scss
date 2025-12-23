@@ -1,8 +1,9 @@
-
-h2, ion-select{
+h2 {
     margin-top: 20px;
     margin-left: 40px;
+    color: rgb(184,108,2);
 }
+
 ion-card-text {
     justify-content: center;
 }
@@ -16,14 +17,6 @@ ion-card-text {
     display: block;
     margin-left: 40px;
     max-width: 200px;
-}
-
-[tag=CCCard] {
-    max-width: 50%;
-    max-height: 800px;
-    display:inline-grid;
-    background: none;
-    box-shadow: none;
 }
 
 [tag=CCImage] {

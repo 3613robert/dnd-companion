@@ -5,6 +5,7 @@ import { ExploreContainerComponent } from '../explore-container/explore-containe
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {IonCol, IonGrid, IonRow} from '@ionic/angular/standalone';
+import d20 from `src/assets/dice/D20.jpg`
 
 @Component({
   selector: 'app-tab1',
@@ -16,7 +17,7 @@ import {IonCol, IonGrid, IonRow} from '@ionic/angular/standalone';
 export class Tab1Page {
   public environmentInjector = inject(EnvironmentInjector);
   constructor() {
-    addIcons({ triangle, ellipse, square, heart, diamond, dice, clipboard, statsChart, storefront, bag, menu});
+    addIcons({ D20, triangle, ellipse, square, heart, diamond, dice, clipboard, statsChart, storefront, bag, menu});
   }
 
 scoresList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];

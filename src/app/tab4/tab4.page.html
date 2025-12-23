@@ -29,9 +29,9 @@
         </ion-select-option>
       </ion-select>
 
-      <ion-card *ngIf="selectedClass">
-        <ion-img [src]="classData[selectedClass].src"></ion-img>
-        <ion-card-content>
+      <ion-card tag='CCCard' *ngIf="selectedClass">
+        <ion-img tag='CCImage' [src]="classData[selectedClass].src"></ion-img>
+        <ion-card-content tag="CCDescription">
           {{ classText[classIndex] }}
         </ion-card-content>
       </ion-card>
@@ -72,17 +72,17 @@
     </ion-select>
 
     <ion-card *ngIf="selectedBackground">
+      <ion-img [src]="backgroundData[selectedBackground].src"></ion-img>
       <ion-card-content>
-        {{ backgroundData[selectedBackground].text }}
-
-        <ion-note class="ion-margin-top">Choose +2 stat</ion-note>
+        {{ backgroundText[backgroundIndex] }}
+        <ion-note style="color: goldenrod;" class="ion-margin-top"><br><br>Choose +2 stat</ion-note>
         <ion-select [(ngModel)]="selectedFirstBgStat">
           <ion-select-option *ngFor="let stat of bgAbilityChoices[selectedBackground]" [value]="stat">
             {{ stat }}
           </ion-select-option>
         </ion-select>
 
-        <ion-note *ngIf="selectedFirstBgStat">Choose +1 stat</ion-note>
+        <ion-note style="color: goldenrod;" *ngIf="selectedFirstBgStat">Choose +1 stat</ion-note>
         <ion-select *ngIf="selectedFirstBgStat" [(ngModel)]="selectedSecondBgStat">
           <ion-select-option
             *ngFor="let stat of remainingBgStats"
@@ -105,7 +105,7 @@
     </ion-note>
 
     <ion-grid>
-      <ion-row *ngFor="let stat of character.stats">
+      <ion-row style="color: goldenrod;" *ngFor="let stat of character.stats">
         <ion-col size="4">{{ stat.name }}</ion-col>
 
         <ion-col size="2">
