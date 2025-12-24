@@ -1,10 +1,9 @@
 #menubar {
     display: inline-flex;
-    justify-content: center;
-    position: relative;
-    gap: 40px;
+    gap: 1px;
 
 }
+
 ion-title {
     position:static;
     color:orange;
@@ -16,15 +15,11 @@ ion-title {
 
 
 ion-button {
-        text-align: right;
+        text-align: center;
         &#char{
             --background: orange;
             color: black;
             font-weight: 700;
-        }
-        &#dice{
-            --background: orange;
-            color: black;
         }
         &#Strength-2{
             background-image: url('/assets/icon/29._Traits_Ideals_Bonds_and_Flaws.png');
@@ -98,7 +93,7 @@ li {
   display: none;
 }
 ion-grid {
-    --ion-grid-columns: 12;
+    --ion-grid-columns: 6;
     --ion-grid-column-padding: 10px;
     --ion-grid-padding: 20px;
 }

@@ -8,8 +8,58 @@
  * For more information on global stylesheets, visit the documentation:
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
+:root {
+  --app-background: #191a1a;
+}
 
-/* Core CSS required for Ionic components to work properly */
+ion-content {
+  --background: var(--app-background);
+}
+
+ion-toolbar {
+  --background: rgb(13, 13, 13);
+  --color: rgb(253, 152, 2);
+}
+
+ion-tab-bar {
+  --background: rgb(13,13,13);
+  --color: rgb(253, 152, 2);
+}
+
+ion-card {
+  --display: flex;
+  --color: rgb(184, 108, 2);
+  --color-selected: rgb(253, 152, 2);
+  --background: #191a1a;
+  box-shadow: none;
+}
+
+ion-alert .alert-wrapper.sc-ion-alert-md {
+  --background: #191a1a;
+  --color: rgb(184, 108, 2);
+}
+
+ion-alert .alert-radio-label.sc-ion-alert-md {
+  color: rgb(184, 108, 2);
+}
+ion-alert [aria-checked="true"].sc-ion-alert-md .alert-radio-label.sc-ion-alert-md{
+  color: rgb(253, 152, 2);
+}
+
+.select-label-placement-start{
+  color: rgb(253, 152, 2);
+}
+.card-content-md {
+  line-height: 1.1;
+}
+.md.hydrated {
+  line-height: 1.1;
+}
+
+ion-button:not(#dice) {
+  --color: rgb(0, 0, 0);
+  --background: goldenrod;
+}
 @import "@ionic/angular/css/core.css";
 
 /* Basic CSS for apps built with Ionic */
