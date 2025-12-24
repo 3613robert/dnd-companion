@@ -190,9 +190,9 @@ export class Tab4Page {
     return 0;
   }
 
-  showModifier(): number {
+  // showModifier(): number {
     
-  }
+  // }
 
   pointCost(score: number): number {
     if (score <= 13) return score - 8;

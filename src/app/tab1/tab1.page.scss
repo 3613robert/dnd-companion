@@ -13,9 +13,28 @@ ion-title {
     display: inline-flex;
 }
 
+ion-row {
+  position: relative;
+
+}
+
+ion-row::after{
+  content: '' ;
+  position: absolute;
+  margin-left: 15%;
+  bottom: 14px;
+  height: 3px;
+  width: calc-size(fit-content, size + 3rem);
+  background: orange;
+}
+
 
 ion-button {
         text-align: center;
+        &#dice{
+            --border-color: goldenrod;
+            border: 1px solid goldenrod;
+        }
         &#char{
             --background: orange;
             color: black;
@@ -109,7 +128,8 @@ ul {
     }
 }
 p {
-    margin-left: 7px;
+    color: goldenrod;
+    width: fit-content;
 }
 
 div {
