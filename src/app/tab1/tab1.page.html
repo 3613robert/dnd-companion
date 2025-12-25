@@ -42,64 +42,100 @@
     <ion-grid>
       <ion-row >
         <ion-col size="1">    
-            <ion-button fill="clear" id="dice" (click)="rollDice(20, 0)">
+            <ion-button fill="clear" id="dice" (click)="rollDice(20)">
               <ion-icon style="color:goldenrod" slot="icon-only" src="assets/dice/D20.svg" ></ion-icon>
             </ion-button>
         </ion-col>
-          <ion-col size="2">
-            <p> {{ diceResult[0]}} </p>
+          <ion-col tag="rollResult" *ngFor="let roll of diceResult[20]; let i = index" size="1">
+            <p tag="rollResult">Roll:</p>
+            <p tag="rollResult">{{ diceResult[20][i]}}</p>
           </ion-col>
+        <ion-col size="1">
+          <ion-select class="D20" (ionChange)="onDiceAmountChange($event)">
+            <ion-select-option *ngFor="let item of [].constructor(4); let i = index">{{i+1}}</ion-select-option>
+          </ion-select>
+        </ion-col>
       </ion-row>
       <ion-row >
-        <ion-col size="1">
-          <ion-button fill="clear"  id="dice" (click)="rollDice(12, 1)">
+        <ion-col size="1">    
+            <ion-button  fill="clear" id="dice" (click)="rollDice(12)">
               <ion-icon style="color:goldenrod" slot="icon-only" src="assets/dice/D12.svg" ></ion-icon>
-          </ion-button>
+            </ion-button>
         </ion-col>
-        <ion-col size="2">
-          <p> {{ diceResult[1]}} </p>
+          <ion-col size="1" tag="rollResult" *ngFor="let roll of diceResult[12]; let i = index" size="1">
+            <p tag="rollResult">Roll:</p>
+            <p tag="rollResult">{{ diceResult[12][i]}}</p>
+          </ion-col>
+        <ion-col size="1">
+          <ion-select class="D12" (ionChange)="onDiceAmountChange($event)">
+            <ion-select-option *ngFor="let item of [].constructor(4); let i = index">{{i+1}}</ion-select-option>
+          </ion-select>
         </ion-col>
       </ion-row>
       <ion-row >
-        <ion-col size="1">
-          <ion-button fill="clear"  id="dice" (click)="rollDice(10, 2)">
+        <ion-col size="1">    
+            <ion-button  fill="clear" id="dice" (click)="rollDice(10)">
               <ion-icon style="color:goldenrod" slot="icon-only" src="assets/dice/D10.svg" ></ion-icon>
-          </ion-button>
+            </ion-button>
         </ion-col>
-        <ion-col size="2">
-          <p> {{ diceResult[2]}} </p>
+          <ion-col size="1" tag="rollResult" *ngFor="let roll of diceResult[10]; let i = index" size="1">
+            <p tag="rollResult">Roll:</p>
+            <p tag="rollResult">{{ diceResult[10][i]}}</p>
+          </ion-col>
+        <ion-col size="1">
+          <ion-select class="D10" (ionChange)="onDiceAmountChange($event)">
+            <ion-select-option *ngFor="let item of [].constructor(4); let i = index">{{i+1}}</ion-select-option>
+          </ion-select>
         </ion-col>
-        </ion-row>
-        <ion-row >
-          <ion-col size="1">
-            <ion-button fill="clear"  id="dice" (click)="rollDice(8, 3)">
+      </ion-row>
+      <ion-row >
+        <ion-col size="1">    
+            <ion-button  fill="clear" id="dice" (click)="rollDice(8)">
               <ion-icon style="color:goldenrod" slot="icon-only" src="assets/dice/D8.svg" ></ion-icon>
             </ion-button>
+        </ion-col>
+          <ion-col size="1" tag="rollResult" *ngFor="let roll of diceResult[8]; let i = index" size="1">
+            <p tag="rollResult">Roll:</p>
+            <p tag="rollResult">{{ diceResult[8][i]}}</p>
           </ion-col>
-          <ion-col size="2">
-            <p> {{ diceResult[3]}} </p>
-          </ion-col>
-        </ion-row>
-        <ion-row >
-          <ion-col size="1">
-            <ion-button fill="clear"  id="dice" (click)="rollDice(6, 4)">
-                            <ion-icon style="color:goldenrod" slot="icon-only" src="assets/dice/D6.svg" ></ion-icon>
+        <ion-col size="1">
+          <ion-select class="D8" (ionChange)="onDiceAmountChange($event)">
+            <ion-select-option *ngFor="let item of [].constructor(4); let i = index">{{i+1}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+      <ion-row >
+        <ion-col size="1">    
+            <ion-button  fill="clear" id="dice" (click)="rollDice(6)">
+              <ion-icon style="color:goldenrod" slot="icon-only" src="assets/dice/D6.svg" ></ion-icon>
             </ion-button>
+        </ion-col>
+          <ion-col  size="1" tag="rollResult" *ngFor="let roll of diceResult[6]; let i = index" size="1">
+            <p tag="rollResult">Roll:</p>
+            <p tag="rollResult">{{ diceResult[6][i]}}</p>
           </ion-col>
-          <ion-col size="2">
-            <p> {{ diceResult[4]}} </p>
-          </ion-col>
-        </ion-row>
-        <ion-row >
-          <ion-col size="1">
-            <ion-button fill="clear" id="dice" (click)="rollDice(4, 5)">
-              <ion-icon style="color:goldenrod" src="assets/dice/D4.svg" slot="icon-only"></ion-icon>
+        <ion-col size="1">
+          <ion-select class="D6" (ionChange)="onDiceAmountChange($event)">
+            <ion-select-option *ngFor="let item of [].constructor(4); let i = index">{{i+1}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+      <ion-row >
+        <ion-col size="1">    
+            <ion-button  fill="clear" id="dice" (click)="rollDice(4)">
+              <ion-icon style="color:goldenrod" slot="icon-only" src="assets/dice/D4.svg" ></ion-icon>
             </ion-button>
+        </ion-col>
+          <ion-col size="1" tag="rollResult" *ngFor="let roll of diceResult[4]; let i = index" size="1">
+            <p tag="rollResult">Roll:</p>
+            <p tag="rollResult">{{ diceResult[4][i]}}</p>
           </ion-col>
-          <ion-col size="2">
-            <p> {{ diceResult[5]}} </p>
-          </ion-col>
-        </ion-row>
+        <ion-col size="1">
+          <ion-select class="D4" (ionChange)="onDiceAmountChange($event)">
+            <ion-select-option *ngFor="let item of [].constructor(4); let i = index">{{i+1}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
     </ion-grid>
   }
 </ion-content>

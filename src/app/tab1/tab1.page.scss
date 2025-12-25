@@ -4,6 +4,19 @@
 
 }
 
+ion-select {
+    border: 1px solid goldenrod;
+    min-width: fit-content;
+    max-width: 20px;
+    padding-left: 2px;
+    font-size: x-small;
+}
+
+ion-grid {
+    --ion-grid-columns: 6;
+    --ion-grid-padding: 0;
+}
+
 ion-title {
     position:static;
     color:orange;
@@ -15,19 +28,11 @@ ion-title {
 
 ion-row {
   position: relative;
-
 }
 
-ion-row::after{
-  content: '' ;
-  position: absolute;
-  margin-left: 15%;
-  bottom: 14px;
-  height: 3px;
-  width: calc-size(fit-content, size + 3rem);
-  background: orange;
+ion-col {
+    align-self: center;
 }
-
 
 ion-button {
         text-align: center;
@@ -111,11 +116,7 @@ li {
 .hidden {
   display: none;
 }
-ion-grid {
-    --ion-grid-columns: 6;
-    --ion-grid-column-padding: 10px;
-    --ion-grid-padding: 20px;
-}
+
 ul {
     display:inline-flexbox;
     position: relative;
@@ -129,7 +130,8 @@ ul {
 }
 p {
     color: goldenrod;
-    width: fit-content;
+    text-align: center;
+    display: inline-flexbox;
 }
 
 div {
@@ -159,4 +161,8 @@ div {
     &#statblock {
         border: 2px solid black;
     }
+
+}
+[tag=rollResult] {
+    --ion-column-padding: 2px;
 }
