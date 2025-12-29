@@ -164,5 +164,6 @@ div {
 
 }
 [tag=rollResult] {
-    --ion-column-padding: 2px;
+    --ion-column-padding: 4px;
+    border: 1px dotted goldenrod;    
 }
