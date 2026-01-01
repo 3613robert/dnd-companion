@@ -1,1 +1,7 @@
-
+ion-tab-button {
+    --padding-end: 7px;
+    font-size: 10px;
+&.tab-selected {
+    color: rgb(247, 183, 19);
+}
+}

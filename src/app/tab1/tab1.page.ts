@@ -6,6 +6,8 @@ import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angu
 import { addIcons } from 'ionicons';
 import {IonCol, IonGrid, IonRow} from '@ionic/angular/standalone';
 import { NgForOf, NgIf } from '@angular/common';
+import { CharacterDataService } from 'src/services/characterdata.service';
+import { Character } from 'src/models/character.model';
 
 @Component({
   selector: 'app-tab1',
@@ -16,17 +18,23 @@ import { NgForOf, NgIf } from '@angular/common';
 })
 export class Tab1Page {
   public environmentInjector = inject(EnvironmentInjector);
-  constructor() {
-    addIcons({ triangle, ellipse, square, heart, diamond, dice, clipboard, statsChart, storefront, bag, menu});
+  character: Character; 
+
+  constructor(private characterDataService: CharacterDataService) {
+    addIcons({ triangle, ellipse, square, heart, diamond, dice, clipboard, statsChart, storefront, bag, menu})
+    this.character = this.characterDataService.getCharacter();
   }
 
 scoresList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+
+proficiencyBonus = 2;
 
 stats = ["Strength", "Dexterity", "Constitution", "Wisdom", "Intelligence", "Charisma"];
 
 skills: Record<string, string[]> = {
   Strength: ['Athletics'],
   Dexterity: ['Acrobatics','Stealth','Sleight of Hand'],
+  Constitution: [], 
   Wisdom: ['Insight','Perception','Animal Handling', 'Medicine', 'Survival'],
   Intelligence: ['Nature','Arcana','Investigation','History', 'Religion'],
   Charisma : ['Persuasion','Intimidation','Deception','Performance']
@@ -48,6 +56,22 @@ openUaDnd() {
 showCharacterOverview(){
   console.log('hi')
   };
+
+showSkillModifier(skill:string, stat:number) {
+  if(this.character.proficiencies.includes(skill.toLowerCase())) {
+    this.character.stats[stat]['skills'][stat]['value'] += this.proficiencyBonus;
+    return this.character.stats[stat]['skills'][stat]['modifier'];
+  } else {
+    this.character.stats[stat]['value'] = this.character.stats[stat]['value'];
+    return this.character.stats[stat]['modifier'];  
+  }
+}
+
+showPlus(skill:string, stat:number) {
+  if(this.character.stats[stat]['modifier'] >= 0) {
+    return '+';
+  } else return "";
+}
 
 diceList = [20, 12, 10, 8, 6, 4]
 diceResult: Record<string, number[]> = {};
@@ -83,6 +107,7 @@ showCharOverview = false;
 
 toggleCharView() {
   this.showCharOverview = !this.showCharOverview;
+  console.log(this.character.proficiencies)
 };
 
 counter(i: number) {
@@ -105,10 +130,20 @@ onDiceAmountChange(event:any) {
       console.log(face)
       if (event.target.classList.contains(`D${face}`)) {
     this.selectedAmount[face] = value
-    console.log(this.selectedAmount[face])
   }
   }
 
 }
 
+statData: Record<string, { src: string, skills: any}> = {};
+statKeys: string[] = Object.keys(this.skills)
+
+ngOnInit() {
+  for (const stat of Object.keys(this.skills)) {
+          this.statData[stat] = {
+            src: `/assets/stats/${stat}.png`,
+            skills: Object.values(this.skills[stat])
+          };
+        }
+    }
 }

@@ -1,12 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
   <ion-buttons id="menubar" slot="end">
-    <ion-button (click)="openUaDnd()">5e tools
-      <ion-icon name="diamond"></ion-icon>
+    <ion-button tag="menuButton" (click)="openUaDnd()">5e tools
     </ion-button>
-    <ion-button (click)="openMenu()">Unearthed Arcana</ion-button>
-    <ion-button (click)="openMenu()">Class</ion-button>
-    <ion-button (click)="toggleDice()">Dice Roller</ion-button>
+    <ion-button tag="menuButton" (click)="openMenu()">Unearthed Arcana</ion-button>
+    <ion-button tag="menuButton" (click)="openMenu()">Class</ion-button>
+    <ion-button tag="menuButton" (click)="toggleDice()">Dice Roller</ion-button>
   </ion-buttons>
   <ion-title id="title">Main menu</ion-title>
   </ion-toolbar>
@@ -15,28 +14,24 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Main Menu</ion-title>
+      <ion-title size="small">Main Menu</ion-title>
     </ion-toolbar>
   </ion-header>
     <ion-button id="char" expand="full" (click)="toggleCharView()">Character Overview</ion-button>
   @if (showCharOverview) {
-    <ul>
-  @for (stat of stats; track stat) {
-    <li>
-      <div id="statblock">
-        <ion-button  
-        color="none" 
-        id={{stat}}-2>
-        </ion-button>
-          <ul id="ulskills">
-            @for (skill of skills[stat]; track skill) {
-              <li id={{stat}}>{{ skill }} {{'(  )'}}</li>
-            }
-          </ul>
-      </div>
-    </li>
+  @for (stat of character.stats; let i = $index; track i) {
+      <ion-card>
+        <ion-img id='statImage' [src]="statData[character.stats[i].name].src">
+        </ion-img>
+        <ion-label id=score style="position: absolute;">{{character.stats[i]['value']}}</ion-label>
+        <ion-label id=mod style="position: absolute;">{{character.stats[i]['modifier']}}</ion-label>
+        <ion-card-content>
+          @for (skill of skills[character.stats[i].name]; track skill) {
+            <li id=statname>{{ skill }}<span id="statmodifier"> ({{showPlus(skill, i)}}{{showSkillModifier(skill, i)}})</span></li>
+          }
+        </ion-card-content>
+      </ion-card> 
   }
-</ul>
   } 
   @if (showDiceList){
     <ion-grid>

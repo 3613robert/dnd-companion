@@ -71,15 +71,15 @@
     <ion-card *ngIf="selectedBackground">
       <ion-img [src]="backgroundData[selectedBackground].src"></ion-img>
       <ion-card-content>
-        {{ backgroundText[backgroundIndex] }}
-        <ion-note style="color: goldenrod;" class="ion-margin-top"><br><br>Choose +2 stat</ion-note>
+        {{ backgroundText[backgroundIndex] }} <br><br> As {{aOrAn}} {{selectedBackground}} you are proficient with: {{backgroundProficiencies[backgroundIndex][0]}} and {{backgroundProficiencies[backgroundIndex][1]}} 
+        <ion-note *ngIf="!selectedFirstBgStat" style="color: goldenrod;" class="ion-margin-top"><br><br>Choose +2 stat</ion-note>
         <ion-select [(ngModel)]="selectedFirstBgStat">
           <ion-select-option *ngFor="let stat of bgAbilityChoices[selectedBackground]" [value]="stat">
             {{ stat }}
           </ion-select-option>
         </ion-select>
 
-        <ion-note style="color: goldenrod;" *ngIf="selectedFirstBgStat">Choose +1 stat</ion-note>
+        <ion-note style="color: goldenrod;" *ngIf="selectedFirstBgStat && !selectedSecondBgStat">Choose +1 stat</ion-note>
         <ion-select *ngIf="selectedFirstBgStat" [(ngModel)]="selectedSecondBgStat">
           <ion-select-option
             *ngFor="let stat of remainingBgStats"
@@ -89,6 +89,7 @@
         </ion-select>
       </ion-card-content>
     </ion-card>
+    
 
     <ion-button (click)="goToRace()">Back</ion-button>
     <ion-button (click)="goToStats()">Next</ion-button>

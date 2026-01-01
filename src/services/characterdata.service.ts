@@ -1,59 +1,33 @@
 import { Injectable } from '@angular/core';
-import { CharacterClass } from 'assets/models/characterclass.model';
+import { Character } from '../models/character.model';
 import { Race } from '../models/race.model';
+import { skipLast } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CharacterDataService {
 
-  private classes: CharacterClass[] = [];
-  private races: Race[] = [];
+  character: Character = {
+    name: '',
+    class: '',
+    race: '',
+    background: '',
+    stats: [
+      { name: 'Strength', value: 8, modifier: -1, skills: [ {name: 'Athletics', value: 8, modifier: -1}]},
+      { name: 'Dexterity', value: 8, modifier: -1, skills: [{name: 'Acrobatics', value: 8, modifier: -1}, {name: 'Stealth', value: 8, modifier: -1} ,{ name: 'Sleight of Hand', value: 8, modifier: -1}]},
+      { name: 'Constitution', value: 8, modifier: -1, skills: []},
+      { name: 'Wisdom', value: 8, modifier: -1, skills: [{name: 'Insight', value: 8, modifier: -1}, {name: 'Perception', value: 8, modifier: -1} ,{ name: 'Animal Handling', value: 8, modifier: -1}, { name: 'Medicine', value: 8, modifier: -1}, { name: 'Survival', value: 8, modifier: -1}]} ,
+      { name: 'Intelligence', value: 8, modifier: -1, skills: [{name: 'Nature', value: 8, modifier: -1}, {name: 'Arcana', value: 8, modifier: -1} ,{ name: 'Investigation', value: 8, modifier: -1}, { name: 'History', value: 8, modifier: -1}, { name: 'Religion', value: 8, modifier: -1}]},
+      { name: 'Charisma', value: 8, modifier: -1, skills:[{name: 'Persuasion', value: 8, modifier: -1}, {name: 'Intimidation', value: 8, modifier: -1} ,{ name: 'Deception', value: 8, modifier: -1}, {name: 'Performance', value: 8, modifier: -1}]},
+    ],
+    proficiencies: [],
+  };
 
-  constructor() {
-    this.initClasses();
-    this.initRaces();
+  getCharacter(): Character {
+    return this.character;
   }
 
-  private initClasses() {
-    const classNames = ['Barbarian', 'Warlock']; // later auto-load
-
-    this.classes = classNames.map(name =>
-      new CharacterClass(
-        name,
-        `/assets/class/${name}.png`,
-        'class description here',
-        'abilities here'
-      )
-    );
-  }
-
-  private initRaces() {
-    const raceNames = ['Elf', 'Dwarf']; // from json later
-
-    this.races = raceNames.map(name =>
-      new Race(
-        name,
-        `/assets/race/${name}.png`,
-        'race description here',
-        'features here'
-      )
-    );
-  }
-
-  getClasses(): CharacterClass[] {
-    return this.classes;
-  }
-
-  getClassByName(name: string): CharacterClass | undefined {
-    return this.classes.find(c => c.name === name);
-  }
-
-  getRaces(): Race[] {
-    return this.races;
-  }
-
-  getRaceByName(name: string): Race | undefined {
-    return this.races.find(r => r.name === name);
-  }
-}
+  updateCharacter(update: Partial<Character>) {
+    Object.assign(this.character, update);
+  }}

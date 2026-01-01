@@ -1,7 +1,24 @@
-#menubar {
-    display: inline-flex;
-    gap: 1px;
+ion-card {
+    max-height: 100px;
+    width: 350px;
+    height: 90px;
+    display: flex;
+    
+}
 
+ion-img {
+    width: 25%;
+    height: 90px;
+}
+ion-card-content {
+    display: grid;
+    align-content: center;
+    justify-content: baseline;
+    left: 30px;
+    width: 250px;
+    height: 100px;
+    padding-top: 0px;
+    padding: 0px;
 }
 
 ion-select {
@@ -22,8 +39,29 @@ ion-title {
     color:orange;
     width: 250px;
 }
-#title {
-    display: inline-flex;
+
+ion-label {
+    display: grid;
+        &#score{
+            height: 87.5px;
+            width: 90px;
+            justify-content: center;
+            align-content: center;
+            left: -1px;
+            top: -1px;
+            font-size: x-large;
+            color: black;
+        }
+        &#mod{
+            width: 90px;
+            align-content: center;
+            justify-content: center;
+            left: -1px;
+            top: 63px;
+            font-size: large;
+            color: rgb(3, 3, 1);
+
+        }
 }
 
 ion-row {
@@ -44,125 +82,37 @@ ion-button {
             --background: orange;
             color: black;
             font-weight: 700;
-        }
-        &#Strength-2{
-            background-image: url('/assets/icon/29._Traits_Ideals_Bonds_and_Flaws.png');
-            background-size:contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            margin-top: 10px;
-            color: black;
-            width: 150px;
-            height: 175px;
-        } &#Dexterity-2 {
-            background-image: url('/assets/icon/29._Traits_Ideals_Bonds_and_FlawsD.png');
-            background-size:contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            margin-top: 10px;
-            color: black;
-            width: 150px;
-            height: 175px;
-        } &#Constitution-2 {
-            background-image: url('/assets/icon/29._Traits_Ideals_Bonds_and_FlawsC.png');
-            background-size:contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            margin-top: 10px;
-            color: black;
-            width: 150px;
-            height: 175px;
-        }&#Intelligence-2 {
-            background-image: url('/assets/icon/29._Traits_Ideals_Bonds_and_FlawsI.png');
-            background-size:contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            margin-top: 10px;
-            color: black;
-            width: 150px;
-            height: 175px;
-        }&#Wisdom-2 {
-            background-image: url('/assets/icon/29._Traits_Ideals_Bonds_and_FlawsW.png');
-            background-size:contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            margin-top: 10px;
-            color: black;
-            width: 150px;
-            height: 175px;
-        }&#Charisma-2 {
-            background-image: url('/assets/icon/29._Traits_Ideals_Bonds_and_FlawsCH.png');
-            background-size:contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            margin-top: 10px;
-            color: black;
-            width: 150px;
-            height: 175px;
+            min-height: 10px;
         }
 }
+
+#statmodifier {
+    color: goldenrod;
+    position: fixed;
+    left: 250px;
+}
+
 li {
-    display: inline-table;
-    width: 380x;
-    &#Intelligence, #Wisdom, #Charisma, #Dexterity, #Strength{
-        display: list-item;
-        position: relative;
-        grid-column: 1;
-        top:10%;
+    display: list-item;
+    &#Intelligence, &#Wisdom, &#Charisma, &#Dexterity, &#Strength, &#Constitution{
+        display:grid;
         padding-bottom: 4px;
+        font-size: x-small;
     }
 }
 
-.hidden {
-  display: none;
-}
-
-ul {
-    display:inline-flexbox;
-    position: relative;
-    width: fit-content;
-    grid-column: 2;
-    &#ulskill {
-        display: grid;
-        position: relative;
-        grid-column: 0;
-    }
-}
 p {
     color: goldenrod;
     text-align: center;
     display: inline-flexbox;
 }
 
-div {
-    display: grid;
-    position: relative;
-    width: 380px;
-    height: 200px;
-    &#statmod{
-        display: grid;
-        position: relative;
-        grid-row-start: auto;
-        justify-content: center;
-        height: 100px;
-        width: 170px;
-        padding: 5px;
-    }
-    &#skills {
-        display: grid;
-        position: relative;
-        left: 200px;
-        bottom: 210px;
-        grid-column-start: span;
-        --background: orange;
-        width: 170px;
-        height:195px;
-        }
-    &#statblock {
-        border: 2px solid black;
-    }
-
-}
 [tag=rollResult] {
     --ion-column-padding: 2px;
+}
+[tag=menuButton] {
+    max-width: 50px;
+    font-size: 6px;
+    font-weight: 700;
+    
 }

@@ -12,7 +12,8 @@ import {
 import { addIcons } from 'ionicons';
 import {
   triangle, ellipse, square, heart, diamond, dice,
-  clipboard, statsChart, storefront, bag, menu
+  clipboard, statsChart, storefront, bag, menu,
+  thumbsDownOutline
 } from 'ionicons/icons';
 
 import races from 'src/races.json';
@@ -21,6 +22,9 @@ import classTextJson from 'src/assets/class/classtext.json';
 import raceTextJson from 'src/assets/race/race.json';
 import backgroundsJson from 'src/assets/backgrounds/backgrounds.json';
 import backgroundTextJson from 'src/assets/backgrounds/backgroundstext.json';
+import { CharacterDataService } from 'src/services/characterdata.service';
+import { Character } from 'src/models/character.model';
+import { startWith } from 'rxjs';
 
 /* ------------------------------------------------ */
 /* TYPES                                            */
@@ -39,14 +43,6 @@ type Stat = {
   value: number;
 };
 
-type Character = {
-  name: string;
-  class: string;
-  race: string;
-  background: string;
-  stats: Stat[];
-  proficiencies: string[];
-};
 
 /* ------------------------------------------------ */
 /* COMPONENT                                        */
@@ -65,17 +61,22 @@ type Character = {
     IonGrid, IonRow, IonCol
   ],
 })
+
 export class Tab4Page {
-
   public environmentInjector = inject(EnvironmentInjector);
+  character: Character;
 
-  constructor(private router: Router) {
+ constructor(
+  private router: Router,
+  private characterDataService: CharacterDataService) {
     addIcons({
       triangle, ellipse, square, heart, diamond, dice,
       clipboard, statsChart, storefront, bag, menu
-    });
-  }
-
+    })
+    this.character = this.characterDataService.getCharacter();
+      }
+    
+     
   /* ------------------------------------------------ */
   /* STATE                                            */
   /* ------------------------------------------------ */
@@ -85,23 +86,7 @@ export class Tab4Page {
   /* ------------------------------------------------ */
   /* CHARACTER                                        */
   /* ------------------------------------------------ */
-
-  character: Character = {
-    name: '',
-    class: '',
-    race: '',
-    background: '',
-    stats: [
-      { name: 'Strength', value: 8 },
-      { name: 'Dexterity', value: 8 },
-      { name: 'Constitution', value: 8 },
-      { name: 'Wisdom', value: 8 },
-      { name: 'Intelligence', value: 8 },
-      { name: 'Charisma', value: 8 },
-    ],
-    proficiencies: [],
-  };
-
+  
   /* ------------------------------------------------ */
   /* CLASS                                            */
   /* ------------------------------------------------ */
@@ -137,9 +122,13 @@ export class Tab4Page {
     .filter((b: any) => b.source === 'XPHB')
     .map((b: any) => b.name)
     .sort();
-
+  
+  backgroundProficiencies: string[] = (backgroundsJson as any).background
+    .filter((b:any) => b.source === 'XPHB')
+    .map((b: any) => Object.keys(b.skillProficiencies[0] ));
+    
   backgroundText: string[] = Object.values(backgroundTextJson);
-  backgroundData: Record<string, { src: string; text: string }> = {};
+  backgroundData: Record<string, { src: string; text: string; proficiencies: string}> = {};
 
   selectedBackground = '';
   backgroundIndex = 0;
@@ -173,6 +162,18 @@ export class Tab4Page {
     ) ?? [];
   }
 
+  selectedBackgroundProf = [ ];
+
+  get bgProficiency() {
+      return this.backgroundProficiencies[this.backgroundIndex]
+    } 
+
+  get aOrAn() {
+    if (this.selectedBackground.startsWith("A") || this.selectedBackground.startsWith("I") || this.selectedBackground.startsWith("U") || this.selectedBackground.startsWith("E") || this.selectedBackground.startsWith("Y") ){
+      return 'an'
+    } else return 'a'
+  }
+
   /* ------------------------------------------------ */
   /* POINT BUY                                        */
   /* ------------------------------------------------ */
@@ -180,19 +181,26 @@ export class Tab4Page {
   totalPoints = 27;
 
   modifierStat(score: number): number {
+    if (score >=0 && score < 2) return -5;
+    if (score >=2 && score < 4) return -4;
+    if (score >=4 && score < 6) return -3;
+    if (score >=6 && score < 8) return -2;
     if (score >= 8 && score < 10) return -1;
-    if (score >= 10 && score < 12) return 0;
-    if (score >= 12 && score < 14) return 1;
-    if (score >= 14 && score < 16) return 2;
-    if (score >= 16 && score < 18) return 3;
-    if (score >=18 && score <20) return 4;
-    if (score >= 20) return 5;
+    if (score >= 10 && score < 12) return +0;
+    if (score >= 12 && score < 14) return +1;
+    if (score >= 14 && score < 16) return +2;
+    if (score >= 16 && score < 18) return +3;
+    if (score >=18 && score <20) return +4;
+    if (score >= 20) return +5;
     return 0;
   }
 
-  // showModifier(): number {
-    
-  // }
+  showModifier() {
+    for(let i = 0; i < this.character.stats.length; i++){
+      const modifierStat = this.modifierStat(this.character.stats[i].value);
+      this.character.stats[i].modifier = modifierStat
+    }
+  }
 
   pointCost(score: number): number {
     if (score <= 13) return score - 8;
@@ -240,6 +248,7 @@ export class Tab4Page {
     }
   }
 
+
   /* ------------------------------------------------ */
   /* NAVIGATION                                       */
   /* ------------------------------------------------ */
@@ -265,7 +274,6 @@ export class Tab4Page {
     this.selectedClass = value;
     this.classIndex = this.classKeys.indexOf(value);
     this.character.class = value;
-    console.log(this.classText[this.classIndex])
   }
 
   onRaceChange(event: any) {
@@ -282,11 +290,15 @@ export class Tab4Page {
     this.character.background = value;
     this.selectedFirstBgStat = '';
     this.selectedSecondBgStat = '';
-  }
+    this.character.proficiencies[0] = this.backgroundProficiencies[this.backgroundIndex][0];
+    this.character.proficiencies[1] = this.backgroundProficiencies[this.backgroundIndex][1];
+      }
 
   finalizeStats() {
     this.applyBackgroundBonus();
+    this.showModifier();
     this.goToSummary();
+    
   }
 
   /* ------------------------------------------------ */
@@ -312,7 +324,8 @@ export class Tab4Page {
       this.backgroundData[bg] = {
         src: `/assets/backgrounds/${bg}.webp`,
         text: 'Background description here',
-      };
+        proficiencies: "proficiencies here",
+     };
     }
   }
 }
