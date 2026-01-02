@@ -1,9 +1,42 @@
 h2 {
     margin-top: 20px;
-    margin-left: 40px;
+    justify-content: center;
     color: rgb(184,108,2);
 }
 
+ion-col {
+    display: grid;
+    justify-self: baseline;
+    justify-content: left;
+    }
+ion-note {
+    margin-left: 11px;
+}
+
+ion-input {
+    max-width: 125px;
+    max-height: 25px;
+    margin-left: 10px;
+    border-bottom: 1px dashed black;
+    font-size: medium;
+    &.sc-ion-input-md-h{
+        min-height: 30px;
+        top: 7px;
+    }
+}
+ion-button {
+    
+    &#next{
+        position: absolute;
+        top: 40%;
+        left: 20%;
+        --background: none;
+        --box-shadow: none;
+    }
+    &#proceed {
+    --background: none;
+    }
+}
 ion-card-text {
     justify-content: center;
 }

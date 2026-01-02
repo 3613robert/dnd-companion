@@ -4,17 +4,21 @@
     <ion-button tag="menuButton" (click)="openUaDnd()">5e tools
     </ion-button>
     <ion-button tag="menuButton" (click)="openMenu()">Unearthed Arcana</ion-button>
-    <ion-button tag="menuButton" (click)="openMenu()">Class</ion-button>
+    <ion-button tag="menuButton" (click)="openClassGuide()">Class</ion-button>
     <ion-button tag="menuButton" (click)="toggleDice()">Dice Roller</ion-button>
   </ion-buttons>
-  <ion-title id="title">Main menu</ion-title>
-  </ion-toolbar>
+      @if (showCharOverview) {
+        <ion-title size="small">{{character.name}}</ion-title>
+        }
+    @if (!showCharOverview) {
+        <ion-title size="small">Main Menu</ion-title>
+      }  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="small">Main Menu</ion-title>
+
     </ion-toolbar>
   </ion-header>
     <ion-button id="char" expand="full" (click)="toggleCharView()">Character Overview</ion-button>
@@ -26,8 +30,13 @@
         <ion-label id=score style="position: absolute;">{{character.stats[i]['value']}}</ion-label>
         <ion-label id=mod style="position: absolute;">{{character.stats[i]['modifier']}}</ion-label>
         <ion-card-content>
-          @for (skill of skills[character.stats[i].name]; track skill) {
-            <li id=statname>{{ skill }}<span id="statmodifier"> ({{showPlus(skill, i)}}{{showSkillModifier(skill, i)}})</span></li>
+          @for (skill of character.stats[i].skills; let x = $index; track x) {
+            @if (skill.isProficient) {
+              <li style="list-style-type: disc;" id=statname>{{ skill.name }}<span id="statmodifier"> ({{showPlus(skill.name, i, x)}}{{skill.modifier}})</span></li>
+            }
+            @if (!skill.isProficient) {
+            <li style="list-style-type: circle;" id=statname>{{ skill.name }}<span id="statmodifier"> ({{showPlus(skill.name, i, x)}}{{skill.modifier}})</span></li>
+          } 
           }
         </ion-card-content>
       </ion-card> 

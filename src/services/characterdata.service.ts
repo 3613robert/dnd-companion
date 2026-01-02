@@ -10,16 +10,17 @@ export class CharacterDataService {
 
   character: Character = {
     name: '',
+    level: 0,
     class: '',
     race: '',
     background: '',
     stats: [
-      { name: 'Strength', value: 8, modifier: -1, skills: [ {name: 'Athletics', value: 8, modifier: -1}]},
-      { name: 'Dexterity', value: 8, modifier: -1, skills: [{name: 'Acrobatics', value: 8, modifier: -1}, {name: 'Stealth', value: 8, modifier: -1} ,{ name: 'Sleight of Hand', value: 8, modifier: -1}]},
+      { name: 'Strength', value: 8, modifier: -1, skills: [ {name: 'Athletics', value: 8, modifier: -1, isProficient: false}]},
+      { name: 'Dexterity', value: 8, modifier: -1, skills: [{name: 'Acrobatics', value: 8, modifier: -1, isProficient: false}, {name: 'Stealth', value: 8, modifier: -1, isProficient: false} ,{ name: 'Sleight of Hand', value: 8, modifier: -1, isProficient: false}]},
       { name: 'Constitution', value: 8, modifier: -1, skills: []},
-      { name: 'Wisdom', value: 8, modifier: -1, skills: [{name: 'Insight', value: 8, modifier: -1}, {name: 'Perception', value: 8, modifier: -1} ,{ name: 'Animal Handling', value: 8, modifier: -1}, { name: 'Medicine', value: 8, modifier: -1}, { name: 'Survival', value: 8, modifier: -1}]} ,
-      { name: 'Intelligence', value: 8, modifier: -1, skills: [{name: 'Nature', value: 8, modifier: -1}, {name: 'Arcana', value: 8, modifier: -1} ,{ name: 'Investigation', value: 8, modifier: -1}, { name: 'History', value: 8, modifier: -1}, { name: 'Religion', value: 8, modifier: -1}]},
-      { name: 'Charisma', value: 8, modifier: -1, skills:[{name: 'Persuasion', value: 8, modifier: -1}, {name: 'Intimidation', value: 8, modifier: -1} ,{ name: 'Deception', value: 8, modifier: -1}, {name: 'Performance', value: 8, modifier: -1}]},
+      { name: 'Wisdom', value: 8, modifier: -1, skills: [{name: 'Insight', value: 8, modifier: -1, isProficient: false}, {name: 'Perception', value: 8, modifier: -1, isProficient: false} ,{ name: 'Animal Handling', value: 8, modifier: -1, isProficient: false}, { name: 'Medicine', value: 8, modifier: -1, isProficient: false}, { name: 'Survival', value: 8, modifier:-1, isProficient: false}]} ,
+      { name:'Intelligence', value : 8 ,modifier : -1 ,skills : [{name:'Nature' ,value : 8 ,modifier : -1, isProficient: false}, {name:'Arcana' ,value : 8 ,modifier : -1, isProficient: false} ,{ name:'Investigation' ,value : 8 ,modifier : -1, isProficient: false}, { name:'History' ,value : 8 ,modifier : -1, isProficient: false}, { name:'Religion' ,value : 8 ,modifier : -1, isProficient: false}]},
+      { name:'Charisma' ,value : 8 ,modifier : -1,skills:[{name:'Persuasion' ,value : 8 ,modifier :-1, isProficient: false},{name:'Intimidation' ,value : 8 ,modifier :-1, isProficient: false} ,{ name:'Deception' ,value : 8 ,modifier :-1, isProficient: false}, {name:'Performance' ,value : 8 ,modifier :-1, isProficient: false}]}
     ],
     proficiencies: [],
   };

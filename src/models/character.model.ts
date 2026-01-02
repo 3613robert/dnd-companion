@@ -2,6 +2,7 @@ export interface SkillStat {
     name: string;
     value: number;
     modifier: number;
+    isProficient?: boolean;
 }
 
 export interface CharacterStat {
@@ -13,6 +14,7 @@ export interface CharacterStat {
 
 export interface Character {
   name: string;
+  level: number;
   class: string;
   race: string;
   background: string;

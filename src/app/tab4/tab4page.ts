@@ -12,9 +12,8 @@ import {
 import { addIcons } from 'ionicons';
 import {
   triangle, ellipse, square, heart, diamond, dice,
-  clipboard, statsChart, storefront, bag, menu,
-  thumbsDownOutline
-} from 'ionicons/icons';
+  clipboard, checkmarkDone, statsChart, checkmark, storefront, bag, menu, save, saveOutline, saveSharp, checkmarkDoneCircleOutline
+  } from 'ionicons/icons';
 
 import races from 'src/races.json';
 import classes from 'src/index.json';
@@ -32,6 +31,7 @@ import { startWith } from 'rxjs';
 
 type CreationStep =
   | 'menu'
+  | 'name'
   | 'class'
   | 'race'
   | 'backgrounds'
@@ -71,8 +71,7 @@ export class Tab4Page {
   private characterDataService: CharacterDataService) {
     addIcons({
       triangle, ellipse, square, heart, diamond, dice,
-      clipboard, statsChart, storefront, bag, menu
-    })
+      clipboard, checkmark, checkmarkDone, statsChart, storefront, bag, menu, save, saveOutline, saveSharp, checkmarkDoneCircleOutline})
     this.character = this.characterDataService.getCharacter();
       }
     
@@ -86,7 +85,9 @@ export class Tab4Page {
   /* ------------------------------------------------ */
   /* CHARACTER                                        */
   /* ------------------------------------------------ */
-  
+  selectedName = '';
+  selectedLevel = 0;
+  profBonus = 2;
   /* ------------------------------------------------ */
   /* CLASS                                            */
   /* ------------------------------------------------ */
@@ -202,6 +203,21 @@ export class Tab4Page {
     }
   }
 
+  showSkillModifier() {
+    for(let i=0; i< this.character.stats.length; i++) {
+      for(let skill in this.character.stats[i].skills){
+        this.character.stats[i].skills[skill].value =  this.character.stats[i].value;
+        if(this.character.stats[i].skills[skill].name.toLowerCase() === this.character.proficiencies[0].toLowerCase() || this.character.stats[i].skills[skill].name.toLowerCase() === this.character.proficiencies[1].toLowerCase()) {
+          this.character.stats[i].skills[skill].value += this.profBonus;
+        } else {
+          this.character.stats[i].skills[skill].value = this.character.stats[i].skills[skill].value;
+         }
+        const skillModifier = this.modifierStat(this.character.stats[i].skills[skill].value);
+        this.character.stats[i].skills[skill].modifier = skillModifier;
+      }
+    }
+  }
+
   pointCost(score: number): number {
     if (score <= 13) return score - 8;
     if (score === 14) return 7;
@@ -255,10 +271,10 @@ export class Tab4Page {
 
   startCharacterCreation() {
     this.router.navigate(['/tabs/tab4']).then(() => {
-      this.currentStep = 'class';
+      this.currentStep = 'name';
     });
   }
-
+  goToName() { this.currentStep = 'name'; } 
   goToClass() { this.currentStep = 'class'; }
   goToRace() { this.currentStep = 'race'; }
   goToBackground() { this.currentStep = 'backgrounds'; }
@@ -268,6 +284,20 @@ export class Tab4Page {
   /* ------------------------------------------------ */
   /* EVENT HANDLERS                                   */
   /* ------------------------------------------------ */
+  onNameChange(event: any) {
+    if (event.key === "Enter") {  
+      const value = (event.target as HTMLInputElement).value;
+      this.selectedName = value;
+      this.character.name = value;
+      console.log(this.character.name);
+    };
+  }
+
+  onLevelChange(event: any) {
+    const value = event.detail.value;
+    this.selectedLevel = value;
+    console.log(this.selectedLevel);
+    this.character.level = value;}   
 
   onClassChange(event: any) {
     const value = event.detail.value;
@@ -292,11 +322,12 @@ export class Tab4Page {
     this.selectedSecondBgStat = '';
     this.character.proficiencies[0] = this.backgroundProficiencies[this.backgroundIndex][0];
     this.character.proficiencies[1] = this.backgroundProficiencies[this.backgroundIndex][1];
-      }
+  }
 
   finalizeStats() {
     this.applyBackgroundBonus();
     this.showModifier();
+    this.showSkillModifier();
     this.goToSummary();
     
   }
