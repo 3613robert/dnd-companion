@@ -12,7 +12,8 @@ import {
 import { addIcons } from 'ionicons';
 import {
   triangle, ellipse, square, heart, diamond, dice,
-  clipboard, checkmarkDone, statsChart, checkmark, storefront, bag, menu, save, saveOutline, saveSharp, checkmarkDoneCircleOutline
+  clipboard, checkmarkDone, statsChart, checkmark, storefront, bag, menu, save, saveOutline, saveSharp, checkmarkDoneCircleOutline,
+  thumbsUpSharp
   } from 'ionicons/icons';
 
 import races from 'src/races.json';
@@ -24,12 +25,14 @@ import backgroundTextJson from 'src/assets/backgrounds/backgroundstext.json';
 import { CharacterDataService } from 'src/services/characterdata.service';
 import { Character } from 'src/models/character.model';
 import { startWith } from 'rxjs';
+import { CharacterStorageService } from '../services/character-storage';
 
 /* ------------------------------------------------ */
 /* TYPES                                            */
 /* ------------------------------------------------ */
 
 type CreationStep =
+  | 'load'
   | 'menu'
   | 'name'
   | 'class'
@@ -64,17 +67,49 @@ type Stat = {
 
 export class Tab4Page {
   public environmentInjector = inject(EnvironmentInjector);
-  character: Character;
+  character!: Character;
+  characters: Character[] = [];
 
  constructor(
   private router: Router,
-  private characterDataService: CharacterDataService) {
+  private characterDataService: CharacterDataService,
+  private characterStorage: CharacterStorageService,) {
     addIcons({
       triangle, ellipse, square, heart, diamond, dice,
       clipboard, checkmark, checkmarkDone, statsChart, storefront, bag, menu, save, saveOutline, saveSharp, checkmarkDoneCircleOutline})
     this.character = this.characterDataService.getCharacter();
       }
-    
+
+  /* -------------------------------------------------*/
+  /* CHARACTER SAVE AND LOAD                          */
+  /* -------------------------------------------------*/
+  loadCharacterView = false;
+  
+  toggleLoadCharacterView() {
+    this.loadAll();
+    this.goToLoad();
+    console.log(this.character.stats)
+  }
+
+  async save() {
+    this.character.id ??= crypto.randomUUID();
+    this.character.createdAt ??= Date.now();
+    this.character.updatedAt = Date.now();
+    await this.characterStorage.saveCharacter(this.character);
+    console.log('Character saved:', this.character.id);
+  }
+
+  async loadAll() {
+    this.characters = await this.characterStorage.loadAllCharacters();
+  }
+
+  async loadCharacter(id: string) {
+    const loaded = await this.characterStorage.loadCharacter(id);
+    if (loaded) {
+      this.character = structuredClone(loaded);
+    }
+  }
+
      
   /* ------------------------------------------------ */
   /* STATE                                            */
@@ -99,7 +134,21 @@ export class Tab4Page {
 
   selectedClass = '';
   classIndex = 0;
-
+  classIndexArray: Record<string, number> = {
+    'Artificer': 0,
+    'Barbarian': 1,
+    'Bard': 2,
+    'Cleric': 3,
+    'Druid': 4,
+    'Fighter': 5,
+    'Monk': 6,
+    'Paladin': 7,
+    'Ranger': 8,
+    'Rogue': 9,
+    'Sorcerer': 10,
+    'Warlock': 11,
+    'Wizard': 12
+  }
   /* ------------------------------------------------ */
   /* RACE                                             */
   /* ------------------------------------------------ */
@@ -114,6 +163,18 @@ export class Tab4Page {
 
   selectedRace = '';
   raceIndex = 0;
+  raceIndexArray: Record<string, number> = {
+    'Aasimar': 0,
+    'Dragonborn': 1,
+    'Dwarf': 2,
+    'Elf': 3,
+    'Gnome': 4,
+    'Goliath': 5,
+    'Halfling': 6,
+    'Human': 7,
+    'Orc': 8,
+    'Tiefling': 9
+  } ;
 
   /* ------------------------------------------------ */
   /* BACKGROUND                                       */
@@ -133,6 +194,24 @@ export class Tab4Page {
 
   selectedBackground = '';
   backgroundIndex = 0;
+  backgroundIndexArray: Record<string, number> = {
+    'Acolyte': 0,
+    'Artisan': 1, 
+    'Charlatan': 2,
+    'Criminal': 3,
+    'Entertainer': 4,
+    'Farmer': 5,
+    'Guard': 6,
+    'Guide': 7,
+    'Hermit': 8,
+    'Merchant': 9,
+    'Noble': 10,
+    'Sage': 11,
+    'Sailor': 12,
+    'Scribe': 13,
+    'Soldier': 14,
+    'Wayfarer': 15
+  }; 
 
   /* Background ability choices */
   bgAbilityChoices: Record<string, string[]> = {
@@ -269,34 +348,90 @@ export class Tab4Page {
   /* NAVIGATION                                       */
   /* ------------------------------------------------ */
 
+  changeTitle(){
+    if (this.currentStep === 'load') {
+        return 'Load Character';
+    } else if(this.currentStep === 'menu') {
+        return 'Character Creation';
+    } else if (this.currentStep === 'name') {
+        return 'Name Your Character';
+    } else if (this.currentStep === 'class') {
+        return 'Select Class';
+    } else if (this.currentStep === 'race') {
+        return 'Select Race';
+    } else if (this.currentStep === 'backgrounds') {
+        return 'Select Background';
+    } else if (this.currentStep === 'stats') {
+        return 'Assign Ability Scores';
+    } else if (this.currentStep === 'summary') {
+        return 'Character Summary';
+    } else {
+      return '';
+    }
+  }
+
+  clearState() {
+    this.selectedName = '';
+    this.selectedLevel = 1;
+    this.selectedClass = '';
+    this.selectedRace = '';
+    this.selectedBackground = '';
+    this.selectedFirstBgStat = '';
+    this.selectedSecondBgStat = '';
+    this.selectedBackgroundProf = [];
+  }
+
   startCharacterCreation() {
+    this.selectedName = '';
+    this.selectedLevel = 1;
+    this.selectedClass = '';
+    this.selectedRace = '';
+    this.selectedBackground = '';
+    this.selectedFirstBgStat = '';
+    this.selectedSecondBgStat = '';
+    this.selectedBackgroundProf = [];
+    this.character.name = '';
+    this.character.level = 1;
+    this.character.id = crypto.randomUUID();
+    this.character.race = '';
+    this.character.class = '';
+    this.character.background = '';
+    this.character.proficiencies = [];
+    this.character.stats = [
+      { name: 'Strength', value: 8, modifier: 0, skills: [] },
+      { name: 'Dexterity', value: 8, modifier: 0, skills: [] },
+      { name: 'Constitution', value: 8, modifier: 0, skills: [] },
+      { name: 'Intelligence', value: 8, modifier: 0, skills: [] },
+      { name: 'Wisdom', value: 8, modifier: 0, skills: [] },
+      { name: 'Charisma', value: 8, modifier: 0, skills: [] },
+    ];
+    this.character.createdAt = Date.now();
     this.router.navigate(['/tabs/tab4']).then(() => {
       this.currentStep = 'name';
     });
   }
+  goToLoad() { this.currentStep = 'load'; } 
+  goToMenu() { this.currentStep = 'menu'; }
   goToName() { this.currentStep = 'name'; } 
-  goToClass() { this.currentStep = 'class'; }
+  goToClass() { this.currentStep = 'class';}
   goToRace() { this.currentStep = 'race'; }
-  goToBackground() { this.currentStep = 'backgrounds'; }
-  goToStats() { this.currentStep = 'stats'; }
+  goToBackground() { this.currentStep = 'backgrounds';}
+  goToStats() { this.currentStep = 'stats'; this.selectedBackground = '';}
   goToSummary() { this.currentStep = 'summary'; }
 
   /* ------------------------------------------------ */
   /* EVENT HANDLERS                                   */
   /* ------------------------------------------------ */
-  onNameChange(event: any) {
-    if (event.key === "Enter") {  
-      const value = (event.target as HTMLInputElement).value;
+  onNameChange(nameInput: any) {
+      const value = nameInput.value;
       this.selectedName = value;
       this.character.name = value;
-      console.log(this.character.name);
-    };
   }
 
   onLevelChange(event: any) {
+    HTMLInputElement
     const value = event.detail.value;
     this.selectedLevel = value;
-    console.log(this.selectedLevel);
     this.character.level = value;}   
 
   onClassChange(event: any) {

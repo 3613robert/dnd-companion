@@ -8,6 +8,7 @@ import {IonCol, IonGrid, IonRow} from '@ionic/angular/standalone';
 import { NgForOf, NgIf } from '@angular/common';
 import { CharacterDataService } from 'src/services/characterdata.service';
 import { Character } from 'src/models/character.model';
+import { CharacterStorageService } from '../services/character-storage';
 
 @Component({
   selector: 'app-tab1',
@@ -15,16 +16,45 @@ import { Character } from 'src/models/character.model';
   styleUrls: ['tab1.page.scss'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [NgIf, NgForOf, IonSelect, IonSelectOption, IonButton, IonButtons,  IonHeader, IonToolbar, IonTitle, IonContent, ExploreContainerComponent, IonMenu, IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonGrid, IonCol, IonRow],
+
 })
 export class Tab1Page {
-  public environmentInjector = inject(EnvironmentInjector);
-  character: Character; 
+  public environmentInjector = inject(EnvironmentInjector)
+  character!: Character; 
+  characters: Character[] = [];
 
-  constructor(private characterDataService: CharacterDataService) {
+  constructor(
+    private characterDataService: CharacterDataService,
+    private characterStorage: CharacterStorageService) {
     addIcons({ triangle, ellipse, square, heart, diamond, dice, clipboard, statsChart, storefront, bag, menu})
     this.character = this.characterDataService.getCharacter();
   }
+  
+/* -------------------------------------------------*/
+/* CHARACTER SAVE AND LOAD                          */
+/* -------------------------------------------------*/
+loadCharacterView = false;
 
+async save() {
+  this.character.id ??= crypto.randomUUID();
+  this.character.createdAt ??= Date.now();
+  this.character.updatedAt = Date.now();
+  await this.characterStorage.saveCharacter(this.character);
+  console.log('Character saved:', this.character.id);
+}
+
+async loadAll() {
+  this.characters = await this.characterStorage.loadAllCharacters();
+}
+
+async loadCharacter(id: string) {
+  const loaded = await this.characterStorage.loadCharacter(id);
+  if (loaded) {
+    this.character = structuredClone(loaded);
+  }
+}
+
+    
 /* ------------------------------------------------ */
 /* DiceRoller Logic                                 */
 /* ------------------------------------------------ */
@@ -100,6 +130,7 @@ toggleDice() {
 toggleCharView() {
   this.showCharOverview = !this.showCharOverview;
   this.toggleProficiencies();
+  console.log(this.character.stats)
 };
 
 /* ------------------------------------------------ */

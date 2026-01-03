@@ -1,32 +1,45 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Character creation    
+    <ion-title style="font-size: 18px;">
+      {{changeTitle()}}    
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="startCharacterCreation()">New Character</ion-button>
-      <ion-icon name="diamond"></ion-icon>
-    </ion-buttons>
+    <ion-button id="editCharacterButton" (click)="toggleLoadCharacterView()">
+      <ion-icon slot="icon-only" src='assets/buttons/editcharacter.svg'></ion-icon>
+    </ion-button>
+      <ion-button id="newCharacterButton" fill="clear" (click)="startCharacterCreation()">
+        <ion-icon slot="icon-only" src='assets/buttons/newcharacter.svg'></ion-icon>
+      </ion-button>
+    </ion-buttons>  
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <ng-container [ngSwitch]="currentStep">
 
     <!-- Menu -->
-
+  <ng-container [ngSwitch]="currentStep">   
+    <ng-container *ngSwitchCase="'load'">
+    <!-- Load Character Screen -->
+      <ion-list *ngFor="let char of characters">
+        <ion-item>
+          <ion-label>{{ char.name }}</ion-label>
+          <ion-button (click)="loadCharacter(char.id)" (click)="goToName()" (click)="clearState()">
+            <ion-icon slot="icon-only" src='assets/buttons/editcharacter.svg'></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ng-container>
     <!-- Name Selection -->
     <ng-container *ngSwitchCase="'name'">
-      <h2 style="display: grid;">Basic character information</h2>
       <ion-grid>
         <ion-row>
           <ion-col size="6">
-            <ion-input style="width: 200px;" placeholder="Enter character name" (keydown)="onNameChange($event)"></ion-input>
+            <ion-input #nameInput style="width: 200px;" placeholder="Enter character name"></ion-input>
           </ion-col>
           <ion-col size="6">
-            <ion-button fill="clear" id="proceed" (click)="onNameChange($event)">
-                <ion-icon slot="icon-only" src='assets/buttons/savename.svg'></ion-icon>
+            <ion-button fill="clear" id="savename" (click)="onNameChange(nameInput)">
+                <ion-icon slot="icon-only" src='assets/buttons/savecharacter.svg'></ion-icon>
              </ion-button>
           </ion-col>
           <ion-col size="6">
@@ -50,8 +63,6 @@
 
     <!-- Class Selection -->
     <ng-container *ngSwitchCase="'class'">
-    <h2>Select Class</h2>
-
       <ion-select [(ngModel)]="selectedClass" (ionChange)="onClassChange($event)">
         <ion-select-option *ngFor="let cls of classKeys" [value]="cls">
           {{ cls }}
@@ -65,14 +76,24 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-button (click)="goToRace()">Next</ion-button>
+      <ion-card tag='CCCard' *ngIf="character.class && !selectedClass">
+        <ion-img tag='CCImage' [src]="classData[character.class].src"></ion-img>
+        <ion-card-content tag="CCDescription">
+          {{ classText[classIndexArray[character.class]] }}
+        </ion-card-content>
+      </ion-card>
+
+      <ion-button id="back" fill="clear" (click)="goToName()">
+        <ion-icon  slot="icon-only" src='assets/buttons/back.svg'></ion-icon>
+      </ion-button>
+      <ion-button id="next" (click)="goToRace()">
+        <ion-icon slot="icon-only" src='assets/buttons/next.svg'></ion-icon>
+      </ion-button>
     </ng-container>
 
 
     <!-- Race Selection -->
     <ng-container *ngSwitchCase="'race'">
-      <h2>Select Race</h2>
-
       <ion-select [(ngModel)]="selectedRace" (ionChange)="onRaceChange($event)">
         <ion-select-option *ngFor="let race of raceNames" [value]="race">
           {{ race }}
@@ -86,14 +107,23 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-button (click)="goToClass()">Back</ion-button>
-      <ion-button (click)="goToBackground()">Next</ion-button>
+      <ion-card tag='CCCard' *ngIf="character.race && !selectedRace">
+        <ion-img tag='CCImage' [src]="raceData[character.race].src"></ion-img>
+        <ion-card-content tag="CCDescription">
+          {{ raceText[raceIndexArray[character.race]] }}
+        </ion-card-content>
+      </ion-card>
+
+      <ion-button id="back" (click)="goToClass()">
+        <ion-icon  slot="icon-only" src='assets/buttons/back.svg'></ion-icon>
+      </ion-button>
+      <ion-button id="next" (click)="goToBackground()">
+        <ion-icon slot="icon-only" src='assets/buttons/next.svg'></ion-icon>
+      </ion-button>
     </ng-container>
 
     <!-- Background -->
     <ng-container *ngSwitchCase="'backgrounds'">
-    <h2>Select Background</h2>
-
     <ion-select [(ngModel)]="selectedBackground" (ionChange)="onBackgroundChange($event)">
       <ion-select-option *ngFor="let bg of backgroundNames" [value]="bg">
         {{ bg }}
@@ -110,7 +140,7 @@
             {{ stat }}
           </ion-select-option>
         </ion-select>
-
+          
         <ion-note style="color: goldenrod;" *ngIf="selectedFirstBgStat && !selectedSecondBgStat">Choose +1 stat</ion-note>
         <ion-select *ngIf="selectedFirstBgStat" [(ngModel)]="selectedSecondBgStat">
           <ion-select-option
@@ -121,10 +151,20 @@
         </ion-select>
       </ion-card-content>
     </ion-card>
-    
 
-    <ion-button (click)="goToRace()">Back</ion-button>
-    <ion-button (click)="goToStats()">Next</ion-button>
+    <ion-card *ngIf="character.background && !selectedBackground">
+      <ion-img [src]="backgroundData[character.background].src"></ion-img>
+      <ion-card-content>
+        {{ backgroundText[backgroundIndexArray[character.background]] }} <br><br> As {{aOrAn}} {{character.background}} you are proficient with: {{backgroundProficiencies[backgroundIndexArray[character.background]][0]}} and {{backgroundProficiencies[backgroundIndexArray[character.background]][1]}}
+      </ion-card-content>
+    </ion-card>
+    
+    <ion-button id="back" (click)="goToRace()">
+      <ion-icon slot="icon-only" src='assets/buttons/back.svg'></ion-icon>
+    </ion-button>
+    <ion-button id="next" (click)="goToStats()">
+      <ion-icon slot="icon-only" src='assets/buttons/next.svg'></ion-icon>
+    </ion-button>
   </ng-container>
 
   <ng-container *ngSwitchCase="'stats'">
@@ -156,43 +196,48 @@
       </ion-row>
     </ion-grid>
 
-    <ion-button (click)="goToBackground()">Back</ion-button>
-    <ion-button (click)="finalizeStats()">Next</ion-button>
+    <ion-button id="back" (click)="goToBackground()">
+      <ion-icon slot="icon-only" src='assets/buttons/back.svg'></ion-icon>
+    </ion-button>
+    <ion-button id="next" (click)="finalizeStats()">
+      <ion-icon slot="icon-only" src='assets/buttons/next.svg'></ion-icon>
+    </ion-button>
   </ng-container>
 
 
 
   <ng-container *ngSwitchCase="'summary'">
-    <h2>Your Character</h2>
-
     <ion-list>
-      <ion-item>
+      <ion-item style="max-height: 35px;">
         <ion-label>Name</ion-label>
         <ion-text>{{ character.name || '—' }}</ion-text>
       </ion-item>
 
-      <ion-item>
+      <ion-item style="max-height: 35px;">
         <ion-label>Class</ion-label>
         <ion-text>{{ character.class }}</ion-text>
       </ion-item>
 
-      <ion-item>
+      <ion-item style="max-height: 35px;">
         <ion-label>Race</ion-label>
         <ion-text>{{ character.race }}</ion-text>
       </ion-item>
 
-      <ion-item>
+      <ion-item style="max-height: 35px;">
         <ion-label>Background</ion-label>
         <ion-text>{{ character.background }}</ion-text>
       </ion-item>
     </ion-list>
 
     <h3>Stats</h3>
-    <ion-list>
-      <ion-item *ngFor="let stat of character.stats">
+    <ion-list id="overview">
+      <ion-item *ngFor="let stat of character.stats" style="max-height: 35px;">
         <ion-label>{{ stat.name }}</ion-label>
         <ion-text>{{ stat.value }}</ion-text>
       </ion-item>
     </ion-list>
+    <ion-button size="large"  id="saveCC" (click)="save()">
+      <ion-icon slot="icon-only" src='assets/buttons/savecharacter.svg'></ion-icon>
+    </ion-button>
   </ng-container>
 </ng-container>

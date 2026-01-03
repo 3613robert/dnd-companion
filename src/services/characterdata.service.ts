@@ -9,6 +9,7 @@ import { skipLast } from 'rxjs';
 export class CharacterDataService {
 
   character: Character = {
+    id: '', 
     name: '',
     level: 0,
     class: '',
@@ -23,6 +24,8 @@ export class CharacterDataService {
       { name:'Charisma' ,value : 8 ,modifier : -1,skills:[{name:'Persuasion' ,value : 8 ,modifier :-1, isProficient: false},{name:'Intimidation' ,value : 8 ,modifier :-1, isProficient: false} ,{ name:'Deception' ,value : 8 ,modifier :-1, isProficient: false}, {name:'Performance' ,value : 8 ,modifier :-1, isProficient: false}]}
     ],
     proficiencies: [],
+    createdAt: 0,
+    updatedAt: 0,  
   };
 
   getCharacter(): Character {

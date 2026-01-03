@@ -13,6 +13,7 @@ export interface CharacterStat {
 }
 
 export interface Character {
+  id: string;
   name: string;
   level: number;
   class: string;
@@ -20,4 +21,6 @@ export interface Character {
   background: string;
   stats: CharacterStat[];
   proficiencies: string[];
+  createdAt: number;
+  updatedAt: number;
 }
