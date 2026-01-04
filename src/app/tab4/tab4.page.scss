@@ -12,6 +12,9 @@ ion-item {
     margin-top:0px;
 }
 
+ion-select {
+    left: 10px;
+}
 
 ion-list {
     --inner-border-width: 0px;
@@ -23,6 +26,7 @@ ion-col {
     display: grid;
     justify-self: baseline;
     justify-content: left;
+    font-weight: lighter;
 }
 
 ion-note {

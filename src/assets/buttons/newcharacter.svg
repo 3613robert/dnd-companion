@@ -8,7 +8,7 @@ unicode: "eb4b"
   xmlns="http://www.w3.org/2000/svg"
   width="24"
   height="24"
-  viewBox="0 0 24 24"
+  viewBox="0 0 24 35"
   fill="none"
   stroke="currentColor"
   stroke-width="2"
@@ -19,4 +19,7 @@ unicode: "eb4b"
   <path d="M16 19h6" />
   <path d="M19 16v6" />
   <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
+  <g font-family="Roboto, Helvetica Neue, sans-serif" font-size="10">
+    <text stroke="none" fill="currentColor" x="2" y="33" style="font-weight: 100">New</text>
+  </g>
 </svg>

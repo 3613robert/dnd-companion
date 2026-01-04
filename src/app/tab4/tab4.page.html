@@ -4,10 +4,13 @@
       {{changeTitle()}}    
     </ion-title>
     <ion-buttons slot="end">
-    <ion-button id="editCharacterButton" (click)="toggleLoadCharacterView()">
-      <ion-icon slot="icon-only" src='assets/buttons/editcharacter.svg'></ion-icon>
+    <ion-button size="large" id="editCharacterButton" (click)="toggleLoadCharacterView()">
+      <ion-icon slot="icon-only" src='assets/buttons/load.svg'></ion-icon>
     </ion-button>
-      <ion-button id="newCharacterButton" fill="clear" (click)="startCharacterCreation()">
+    <ion-button size="large" id="editCharacterButton" (click)="goToName()">
+      <ion-icon slot="icon-only" src="assets/buttons/editcharacter.svg"></ion-icon>
+    </ion-button>
+      <ion-button size="large" id="newCharacterButton" fill="clear" (click)="startCharacterCreation()">
         <ion-icon slot="icon-only" src='assets/buttons/newcharacter.svg'></ion-icon>
       </ion-button>
     </ion-buttons>  
@@ -24,8 +27,8 @@
       <ion-list *ngFor="let char of characters">
         <ion-item>
           <ion-label>{{ char.name }}</ion-label>
-          <ion-button (click)="loadCharacter(char.id)" (click)="goToName()" (click)="clearState()">
-            <ion-icon slot="icon-only" src='assets/buttons/editcharacter.svg'></ion-icon>
+          <ion-button size="large" fill="clear" id="savename" (click)="loadCharacter(char.id)" (click)="goToName()" (click)="clearState()">
+            <ion-icon slot="icon-only" src="assets/buttons/load.svg"></ion-icon>
           </ion-button>
         </ion-item>
       </ion-list>
@@ -35,7 +38,7 @@
       <ion-grid>
         <ion-row>
           <ion-col size="6">
-            <ion-input #nameInput style="width: 200px;" placeholder="Enter character name"></ion-input>
+            <ion-input #nameInput style="width: 200px; font-size:small; text-align: center;" placeholder="Enter character name"></ion-input>
           </ion-col>
           <ion-col size="6">
             <ion-button fill="clear" id="savename" (click)="onNameChange(nameInput)">
@@ -43,7 +46,7 @@
              </ion-button>
           </ion-col>
           <ion-col size="6">
-            <ion-note style="align-content: center;">Select your level:</ion-note>
+            <ion-note style="align-content: center; margin-left: 40%; width: 110px ;">Select your level:</ion-note>
           </ion-col>
           <ion-col size="6">
             <ion-select [(ngModel)]="selectedLevel" (ionChange)="onLevelChange($event)">
@@ -63,7 +66,7 @@
 
     <!-- Class Selection -->
     <ng-container *ngSwitchCase="'class'">
-      <ion-select [(ngModel)]="selectedClass" (ionChange)="onClassChange($event)">
+      <ion-select [(ngModel)]="selectedClass" (ionChange)="onClassChange($event)" placeholder="Select Class">
         <ion-select-option *ngFor="let cls of classKeys" [value]="cls">
           {{ cls }}
         </ion-select-option>
@@ -238,6 +241,9 @@
     </ion-list>
     <ion-button size="large"  id="saveCC" (click)="save()">
       <ion-icon slot="icon-only" src='assets/buttons/savecharacter.svg'></ion-icon>
+    </ion-button>
+    <ion-button size="large" id="back" (click)="goToStats()">
+      <ion-icon slot="icon-only" src='assets/buttons/back.svg'></ion-icon>
     </ion-button>
   </ng-container>
 </ng-container>

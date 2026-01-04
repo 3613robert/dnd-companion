@@ -26,7 +26,7 @@ import { CharacterDataService } from 'src/services/characterdata.service';
 import { Character } from 'src/models/character.model';
 import { startWith } from 'rxjs';
 import { CharacterStorageService } from '../services/character-storage';
-
+import {CharacterState} from 'src/app/services/character-state'
 /* ------------------------------------------------ */
 /* TYPES                                            */
 /* ------------------------------------------------ */
@@ -73,7 +73,8 @@ export class Tab4Page {
  constructor(
   private router: Router,
   private characterDataService: CharacterDataService,
-  private characterStorage: CharacterStorageService,) {
+  private characterStorage: CharacterStorageService,
+  private characterState: CharacterState) {
     addIcons({
       triangle, ellipse, square, heart, diamond, dice,
       clipboard, checkmark, checkmarkDone, statsChart, storefront, bag, menu, save, saveOutline, saveSharp, checkmarkDoneCircleOutline})
@@ -106,7 +107,9 @@ export class Tab4Page {
   async loadCharacter(id: string) {
     const loaded = await this.characterStorage.loadCharacter(id);
     if (loaded) {
-      this.character = structuredClone(loaded);
+      const clone = structuredClone(loaded);
+      this.character = clone;
+      this.characterState.setCharacter(clone);
     }
   }
 
@@ -354,15 +357,15 @@ export class Tab4Page {
     } else if(this.currentStep === 'menu') {
         return 'Character Creation';
     } else if (this.currentStep === 'name') {
-        return 'Name Your Character';
+        return 'Character info';
     } else if (this.currentStep === 'class') {
-        return 'Select Class';
+        return 'Class';
     } else if (this.currentStep === 'race') {
-        return 'Select Race';
+        return 'Race';
     } else if (this.currentStep === 'backgrounds') {
-        return 'Select Background';
+        return 'Background';
     } else if (this.currentStep === 'stats') {
-        return 'Assign Ability Scores';
+        return 'Ability Scores';
     } else if (this.currentStep === 'summary') {
         return 'Character Summary';
     } else {
@@ -382,30 +385,29 @@ export class Tab4Page {
   }
 
   startCharacterCreation() {
-    this.selectedName = '';
-    this.selectedLevel = 1;
-    this.selectedClass = '';
-    this.selectedRace = '';
-    this.selectedBackground = '';
-    this.selectedFirstBgStat = '';
-    this.selectedSecondBgStat = '';
-    this.selectedBackgroundProf = [];
-    this.character.name = '';
-    this.character.level = 1;
-    this.character.id = crypto.randomUUID();
-    this.character.race = '';
-    this.character.class = '';
-    this.character.background = '';
-    this.character.proficiencies = [];
-    this.character.stats = [
+  const fresh = {
+    id: crypto.randomUUID(),
+    name: '',
+    level: 1, 
+    class: '',
+    race: '',
+    background: '',
+    stats: [
       { name: 'Strength', value: 8, modifier: 0, skills: [] },
       { name: 'Dexterity', value: 8, modifier: 0, skills: [] },
       { name: 'Constitution', value: 8, modifier: 0, skills: [] },
       { name: 'Intelligence', value: 8, modifier: 0, skills: [] },
       { name: 'Wisdom', value: 8, modifier: 0, skills: [] },
       { name: 'Charisma', value: 8, modifier: 0, skills: [] },
-    ];
-    this.character.createdAt = Date.now();
+    ],
+    proficiencies: [],
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  };
+    this.character = fresh;
+    this.characterState.setCharacter(fresh);
+    this.clearState();
+    this.selectedBackgroundProf = [];
     this.router.navigate(['/tabs/tab4']).then(() => {
       this.currentStep = 'name';
     });

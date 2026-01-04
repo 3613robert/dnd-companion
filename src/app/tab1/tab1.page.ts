@@ -9,6 +9,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { CharacterDataService } from 'src/services/characterdata.service';
 import { Character } from 'src/models/character.model';
 import { CharacterStorageService } from '../services/character-storage';
+import { CharacterState } from '../services/character-state';
 
 @Component({
   selector: 'app-tab1',
@@ -25,7 +26,8 @@ export class Tab1Page {
 
   constructor(
     private characterDataService: CharacterDataService,
-    private characterStorage: CharacterStorageService) {
+    private characterStorage: CharacterStorageService,
+    private characterState: CharacterState) {
     addIcons({ triangle, ellipse, square, heart, diamond, dice, clipboard, statsChart, storefront, bag, menu})
     this.character = this.characterDataService.getCharacter();
   }
@@ -50,7 +52,9 @@ async loadAll() {
 async loadCharacter(id: string) {
   const loaded = await this.characterStorage.loadCharacter(id);
   if (loaded) {
-    this.character = structuredClone(loaded);
+    const clone = structuredClone(loaded);
+    this.character = clone;
+    this.characterState.setCharacter(clone);
   }
 }
 
@@ -174,5 +178,10 @@ ngOnInit() {
         }
   );
   this.toggleProficiencies();
-} 
-} 
+  this.characterState.character$.subscribe(character => {
+    if (character) {
+    this.character = character;
+  }
+}); 
+}
+}
