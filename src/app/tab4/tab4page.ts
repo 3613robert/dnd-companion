@@ -22,6 +22,7 @@ import classTextJson from 'src/assets/class/classtext.json';
 import raceTextJson from 'src/assets/race/race.json';
 import backgroundsJson from 'src/assets/backgrounds/backgrounds.json';
 import backgroundTextJson from 'src/assets/backgrounds/backgroundstext.json';
+import { Spells } from 'src/models/spells.model';
 import { CharacterDataService } from 'src/services/characterdata.service';
 import { Character } from 'src/models/character.model';
 import { startWith } from 'rxjs';
@@ -69,6 +70,7 @@ export class Tab4Page {
   public environmentInjector = inject(EnvironmentInjector);
   character!: Character;
   characters: Character[] = [];
+  spells: Spells[] = [];
 
  constructor(
   private router: Router,
@@ -400,6 +402,7 @@ export class Tab4Page {
       { name: 'Wisdom', value: 8, modifier: 0, skills: [] },
       { name: 'Charisma', value: 8, modifier: 0, skills: [] },
     ],
+    spells: {} as Spells,
     proficiencies: [],
     createdAt: Date.now(),
     updatedAt: Date.now(),

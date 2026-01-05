@@ -29,8 +29,7 @@ export class Tab1Page {
     private characterStorage: CharacterStorageService,
     private characterState: CharacterState) {
     addIcons({ triangle, ellipse, square, heart, diamond, dice, clipboard, statsChart, storefront, bag, menu})
-    this.character = this.characterDataService.getCharacter();
-  }
+    this.character = characterDataService.getCharacter()}
   
 /* -------------------------------------------------*/
 /* CHARACTER SAVE AND LOAD                          */
@@ -132,10 +131,7 @@ toggleDice() {
 }
 
 toggleCharView() {
-  this.showCharOverview = !this.showCharOverview;
-  this.toggleProficiencies();
-  console.log(this.character.stats)
-};
+  this.showCharOverview = !this.showCharOverview;};
 
 /* ------------------------------------------------ */
 /* Character Overview                               */
@@ -165,6 +161,7 @@ toggleProficiencies() {
 }
 
 statData: Record<string, { src: string}> = {};
+
 
 /* ------------------------------------------------ */
 /* INIT DATA MAPS                                   */

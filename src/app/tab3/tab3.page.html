@@ -12,6 +12,26 @@
       <ion-title size="large">Tab 3</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-searchbar (ionInput)="handleInput($event)"></ion-searchbar>
+  <ion-list>
+  @for (spell of results; track spell.name) {
+    <ion-item>
+      <ion-label>
+        <h2>{{ spell.name }}</h2>
+        <p>Level {{ spell.level }} · {{ spell.school }}</p>
+      </ion-label>
+    </ion-item>
+  }
+</ion-list>
+  @if (results.length === 0) {
+  <ion-list>
+    @for (spell of spells; track spell.name) {
+      <ion-item tag="results">
+        {{spell.name}} · {{spell.school}} · Level {{spell.level}} · <p *ngIf="spell.concentration"> ⚠ (C)</p>
+      </ion-item>
+    }
+  </ion-list>
+} 
 
   <app-explore-container name="Tab 3 page"></app-explore-container>
 </ion-content>

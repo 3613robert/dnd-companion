@@ -1,3 +1,5 @@
+import { Spells} from "./spells.model";
+
 export interface SkillStat {
     name: string;
     value: number;
@@ -21,6 +23,7 @@ export interface Character {
   background: string;
   stats: CharacterStat[];
   proficiencies: string[];
+  spells: Spells;
   createdAt: number;
   updatedAt: number;
 }

@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Character } from '../models/character.model';
-import { Race } from '../models/race.model';
 import { skipLast } from 'rxjs';
+import { Spells } from 'src/models/spells.model';
+import { EnvironmentInjector, inject } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CharacterDataService {
-
+  public environmentInjector = inject(EnvironmentInjector);
+  spells: Spells[] = [];
   character: Character = {
     id: '', 
     name: '',
@@ -23,6 +25,7 @@ export class CharacterDataService {
       { name:'Intelligence', value : 8 ,modifier : -1 ,skills : [{name:'Nature' ,value : 8 ,modifier : -1, isProficient: false}, {name:'Arcana' ,value : 8 ,modifier : -1, isProficient: false} ,{ name:'Investigation' ,value : 8 ,modifier : -1, isProficient: false}, { name:'History' ,value : 8 ,modifier : -1, isProficient: false}, { name:'Religion' ,value : 8 ,modifier : -1, isProficient: false}]},
       { name:'Charisma' ,value : 8 ,modifier : -1,skills:[{name:'Persuasion' ,value : 8 ,modifier :-1, isProficient: false},{name:'Intimidation' ,value : 8 ,modifier :-1, isProficient: false} ,{ name:'Deception' ,value : 8 ,modifier :-1, isProficient: false}, {name:'Performance' ,value : 8 ,modifier :-1, isProficient: false}]}
     ],
+    spells: {} as Spells,
     proficiencies: [],
     createdAt: 0,
     updatedAt: 0,  

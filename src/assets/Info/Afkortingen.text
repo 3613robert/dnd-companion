@@ -1,0 +1,160 @@
+SPELL_AREA_TYPE_TO_FULL = {
+	"ST": "Single Target",
+	"MT": "Multiple Targets",
+	"C": "Cube",
+	"N": "Cone",
+	"Y": "Cylinder",
+	"S": "Sphere",
+	"R": "Circle",
+	"Q": "Square",
+	"L": "Line",
+	"H": "Hemisphere",
+	"W": "Wall",
+};
+
+SP_MISC_TAG_TO_FULL = {
+	"HL": "Healing",
+	"THP": "Grants Temporary Hit Points",
+	"SGT": "Requires Sight",
+	"PRM": "Permanent Effects",
+	"SCL": "Scaling Effects",
+	"SCT": "Scaling Targets",
+	"SMN": "Summons Creature",
+	"MAC": "Modifies AC",
+	"TP": "Teleportation",
+	"FMV": "Forced Movement",
+	"RO": "Rollable Effects",
+	"LGTS": "Creates Sunlight",
+	"LGT": "Creates Light",
+	"UBA": "Uses Bonus Action",
+	"PS": "Plane Shifting",
+	"OBS": "Obscures Vision",
+	"DFT": "Difficult Terrain",
+	"AAD": "Additional Attack Damage",
+	"OBJ": "Affects Objects",
+	"ADV": "Grants Advantage",
+	"PIR": "Permanent If Repeated",
+};
+
+Parser.ITM_PROP_ABV__TWO_HANDED = "2H";
+Parser.ITM_PROP_ABV__AMMUNITION = "A";
+Parser.ITM_PROP_ABV__AMMUNITION_FUTURISTIC = "AF";
+Parser.ITM_PROP_ABV__BURST_FIRE = "BF";
+Parser.ITM_PROP_ABV__EXTENDED_REACH = "ER";
+Parser.ITM_PROP_ABV__FINESSE = "F";
+Parser.ITM_PROP_ABV__HEAVY = "H";
+Parser.ITM_PROP_ABV__LIGHT = "L";
+Parser.ITM_PROP_ABV__LOADING = "LD";
+Parser.ITM_PROP_ABV__OTHER = "OTH";
+Parser.ITM_PROP_ABV__REACH = "R";
+Parser.ITM_PROP_ABV__RELOAD = "RLD";
+Parser.ITM_PROP_ABV__SPECIAL = "S";
+Parser.ITM_PROP_ABV__THROWN = "T";
+Parser.ITM_PROP_ABV__VERSATILE = "V";
+Parser.ITM_PROP_ABV__VESTIGE_OF_DIVERGENCE = "Vst";
+
+Parser.ITM_PROP__TWO_HANDED = "2H";
+Parser.ITM_PROP__AMMUNITION = "A";
+Parser.ITM_PROP__AMMUNITION_FUTURISTIC = "AF|DMG";
+Parser.ITM_PROP__BURST_FIRE = "BF|DMG";
+Parser.ITM_PROP__EXTENDED_REACH = "ER|TDCSR";
+Parser.ITM_PROP__FINESSE = "F";
+Parser.ITM_PROP__HEAVY = "H";
+Parser.ITM_PROP__LIGHT = "L";
+Parser.ITM_PROP__LOADING = "LD";
+Parser.ITM_PROP__OTHER = "OTH";
+Parser.ITM_PROP__REACH = "R";
+Parser.ITM_PROP__RELOAD = "RLD|DMG";
+Parser.ITM_PROP__SPECIAL = "S";
+Parser.ITM_PROP__THROWN = "T";
+Parser.ITM_PROP__VERSATILE = "V";
+Parser.ITM_PROP__VESTIGE_OF_DIVERGENCE = "Vst|TDCSR";
+
+Parser.ITM_PROP__ODND_TWO_HANDED = "2H|XPHB";
+Parser.ITM_PROP__ODND_AMMUNITION = "A|XPHB";
+Parser.ITM_PROP__ODND_FINESSE = "F|XPHB";
+Parser.ITM_PROP__ODND_HEAVY = "H|XPHB";
+Parser.ITM_PROP__ODND_LIGHT = "L|XPHB";
+Parser.ITM_PROP__ODND_LOADING = "LD|XPHB";
+Parser.ITM_PROP__ODND_REACH = "R|XPHB";
+Parser.ITM_PROP__ODND_THROWN = "T|XPHB";
+Parser.ITM_PROP__ODND_VERSATILE = "V|XPHB";
+
+Parser.ITM_TYP_ABV__TREASURE = "$";
+Parser.ITM_TYP_ABV__TREASURE_ART_OBJECT = "$A";
+Parser.ITM_TYP_ABV__TREASURE_COINAGE = "$C";
+Parser.ITM_TYP_ABV__TREASURE_GEMSTONE = "$G";
+Parser.ITM_TYP_ABV__AMMUNITION = "A";
+Parser.ITM_TYP_ABV__AMMUNITION_FUTURISTIC = "AF";
+Parser.ITM_TYP_ABV__VEHICLE_AIR = "AIR";
+Parser.ITM_TYP_ABV__ARTISAN_TOOL = "AT";
+Parser.ITM_TYP_ABV__EXPLOSIVE = "EXP";
+Parser.ITM_TYP_ABV__FOOD_AND_DRINK = "FD";
+Parser.ITM_TYP_ABV__ADVENTURING_GEAR = "G";
+Parser.ITM_TYP_ABV__GAMING_SET = "GS";
+Parser.ITM_TYP_ABV__GENERIC_VARIANT = "GV";
+Parser.ITM_TYP_ABV__HEAVY_ARMOR = "HA";
+Parser.ITM_TYP_ABV__ILLEGAL_DRUG = "IDG";
+Parser.ITM_TYP_ABV__INSTRUMENT = "INS";
+Parser.ITM_TYP_ABV__LIGHT_ARMOR = "LA";
+Parser.ITM_TYP_ABV__MELEE_WEAPON = "M";
+Parser.ITM_TYP_ABV__MEDIUM_ARMOR = "MA";
+Parser.ITM_TYP_ABV__MOUNT = "MNT";
+Parser.ITM_TYP_ABV__OTHER = "OTH";
+Parser.ITM_TYP_ABV__POTION = "P";
+Parser.ITM_TYP_ABV__RANGED_WEAPON = "R";
+Parser.ITM_TYP_ABV__ROD = "RD";
+Parser.ITM_TYP_ABV__RING = "RG";
+Parser.ITM_TYP_ABV__SHIELD = "S";
+Parser.ITM_TYP_ABV__SCROLL = "SC";
+Parser.ITM_TYP_ABV__SPELLCASTING_FOCUS = "SCF";
+Parser.ITM_TYP_ABV__VEHICLE_WATER = "SHP";
+Parser.ITM_TYP_ABV__VEHICLE_SPACE = "SPC";
+Parser.ITM_TYP_ABV__TOOL = "T";
+Parser.ITM_TYP_ABV__TACK_AND_HARNESS = "TAH";
+Parser.ITM_TYP_ABV__TRADE_BAR = "TB";
+Parser.ITM_TYP_ABV__TRADE_GOOD = "TG";
+Parser.ITM_TYP_ABV__VEHICLE_LAND = "VEH";
+Parser.ITM_TYP_ABV__WAND = "WD";
+
+MON_LANGUAGE_TAG_TO_FULL = {
+	"AB": "Abyssal",
+	"AQ": "Aquan",
+	"AU": "Auran",
+	"C": "Common",
+	"CE": "Celestial",
+	"CS": "Can't Speak Known Languages",
+	"CSL": "Common Sign Language",
+	"D": "Dwarvish",
+	"DR": "Draconic",
+	"DS": "Deep Speech",
+	"DU": "Druidic",
+	"E": "Elvish",
+	"G": "Gnomish",
+	"GI": "Giant",
+	"GO": "Goblin",
+	"GTH": "Gith",
+	"H": "Halfling",
+	"I": "Infernal",
+	"IG": "Ignan",
+	"LF": "Languages Known in Life",
+	"O": "Orc",
+	"OTH": "Other",
+	"P": "Primordial",
+	"S": "Sylvan",
+	"T": "Terran",
+	"TC": "Thieves' cant",
+	"TP": "Telepathy",
+	"U": "Undercommon",
+	"X": "Any (Choose)",
+	"XX": "All",
+};
+
+MON_SENSE_TAG_TO_FULL = {
+	"B": "blindsight",
+	"D": "darkvision",
+	"SD": "superior darkvision",
+	"T": "tremorsense",
+	"U": "truesight",
+};
+
