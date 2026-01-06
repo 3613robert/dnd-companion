@@ -1,37 +1,35 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 3
-    </ion-title>
+    <ion-searchbar (ionInput)="handleInput($event)" style="width: 70%" ></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
+  <ion-header>
+    <ion-grid>
+      <ion-row id="header">
+        <ion-col class="ion-row-indented" size="4" id="name">Name</ion-col>
+        <ion-col class="ion-row-indented" size="2" id="level">Level</ion-col>
+        <ion-col class="ion-row-indented" size="3" id="school">School</ion-col>
+        <ion-col class="ion-row-indented" size="4" id="concentration" offset="left">Concentration</ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-header>
-  <ion-searchbar (ionInput)="handleInput($event)"></ion-searchbar>
+      <ion-grid>
+      @for (spell of spells; track spell.name){
+      <ion-row id="fullList">
+        <ion-col class="ion-col-indented" id="fullList" size="3"> {{spell.name}}</ion-col>
+        <ion-col class="ion-col-indented" id="fullList" size="1"> {{spell.level}} </ion-col>
+        <ion-col class="ion-col-indented" id="fullList" size="3"> {{spell.school}}</ion-col>
+        <ion-col class="ion-col-indented" id="fullList" size="1" *ngIf="spell.concentration" >⚠ (C)</ion-col>
+      </ion-row>}
+    </ion-grid>
   <ion-list>
   @for (spell of results; track spell.name) {
-    <ion-item>
-      <ion-label>
-        <h2>{{ spell.name }}</h2>
-        <p>Level {{ spell.level }} · {{ spell.school }}</p>
-      </ion-label>
+    <ion-item class="ion-item-indented" id="results">
+        <p id="results">{{ spell.name }} · Level {{ spell.level }} · {{ spell.school }} · </p> <p &nbsp id="concentration" *ngIf="spell.concentration"> ⚠ (C)</p>
     </ion-item>
   }
 </ion-list>
-  @if (results.length === 0) {
-  <ion-list>
-    @for (spell of spells; track spell.name) {
-      <ion-item tag="results">
-        {{spell.name}} · {{spell.school}} · Level {{spell.level}} · <p *ngIf="spell.concentration"> ⚠ (C)</p>
-      </ion-item>
-    }
-  </ion-list>
-} 
-
   <app-explore-container name="Tab 3 page"></app-explore-container>
 </ion-content>

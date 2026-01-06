@@ -70,16 +70,8 @@ async loadCharacter(id: string) {
 }
     values = "";
   /* ------------------------------------------------ */
-  /* SPELLS                                        */
+  /* PARSERS                                          */
   /* ------------------------------------------------ */
-  classSpellName:object[] = [];
-
-  BuildclassSpellName() { Object.entries(XPHB).forEach(([key, value]) => {
-    this.values = key
-    this.classSpellName.push([{[key]:value.class}])})
-
-    
-  }
 
   parseComponents(components: any): string[] {
   const result: string[] = [];
@@ -104,6 +96,17 @@ parseEntries(entries: any[]): string[] {
 
   return result;
 }
+
+  /* ------------------------------------------------ */
+  /* SPELLS                                           */
+  /* ------------------------------------------------ */
+  classSpellName:object[] = [];
+
+  BuildclassSpellName() { Object.entries(XPHB).forEach(([key, value]) => {
+    this.values = key
+    this.classSpellName.push([{[key]:value.class}])})
+  }
+
 isConcentration(duration: any[]): boolean {
   if (!Array.isArray(duration)) return false;
 
@@ -132,13 +135,10 @@ BuildSpells() {
   /* ------------------------------------------------ */
   /* SEARCH FUNCTION                                  */
   /* ------------------------------------------------ */
-  searching = false;
-
-
 
 handleInput(event: Event) {
   const target = event.target as HTMLIonSearchbarElement;
-  const query = target.value?.toLowerCase() || '';
+  const query = target.value?.toLowerCase().trim() || '';
   console.log(this.classSpellName);
   if (query === "") {
     this.results = [];
