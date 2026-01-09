@@ -2,9 +2,11 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, EnvironmentInjector, inject, NO_ERRO
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import type { OverlayEventDetail} from '@ionic/core'
 
 import {
-  IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent,
+  IonAlert, IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent,
   IonItem, IonList, IonSelect, IonSelectOption, IonIcon,
   IonGrid, IonRow, IonCol
 } from '@ionic/angular/standalone';
@@ -22,21 +24,27 @@ import classTextJson from 'src/assets/class/classtext.json';
 import raceTextJson from 'src/assets/race/race.json';
 import backgroundsJson from 'src/assets/backgrounds/backgrounds.json';
 import backgroundTextJson from 'src/assets/backgrounds/backgroundstext.json';
-import { Spells } from 'src/models/spells.model';
+import spellNameJson from 'src/assets/spells/spellsXPHB.json'
+import classSpellNameJson from 'src/assets/spells/spellsource.json'
+import { Spell } from 'src/models/spell.model';
 import { CharacterDataService } from 'src/services/characterdata.service';
-import { Character } from 'src/models/character.model';
+import { Character , CharacterStat, SkillStat} from 'src/models/character.model';
 import { startWith } from 'rxjs';
 import { CharacterStorageService } from '../services/character-storage';
 import {CharacterState} from 'src/app/services/character-state'
+
 /* ------------------------------------------------ */
 /* TYPES                                            */
 /* ------------------------------------------------ */
+
+type Tab4View = 'overview' | 'load'|'menu' ;
 
 type CreationStep =
   | 'load'
   | 'menu'
   | 'name'
   | 'class'
+  | 'spells'
   | 'race'
   | 'backgrounds'
   | 'stats'
@@ -59,7 +67,7 @@ type Stat = {
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   imports: [
     CommonModule,
-    FormsModule,
+    FormsModule, IonAlert,
     IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent,
     IonItem, IonList, IonSelect, IonSelectOption, IonIcon,
     IonGrid, IonRow, IonCol
@@ -70,13 +78,18 @@ export class Tab4Page {
   public environmentInjector = inject(EnvironmentInjector);
   character!: Character;
   characters: Character[] = [];
-  spells: Spells[] = [];
+  skills: SkillStat[] = [];
+  spells: Spell[] = [];
+  public alertButtons= [{text: 'Cancel', role: 'cancel', handler: () => {console.log('Alert canceled');},},
+    {text: 'OK', role: 'confirm', handler: () => {
+        console.log('Alert confirmed');},},];
 
  constructor(
+  private route: ActivatedRoute,
   private router: Router,
   private characterDataService: CharacterDataService,
   private characterStorage: CharacterStorageService,
-  private characterState: CharacterState) {
+  private characterState: CharacterState){
     addIcons({
       triangle, ellipse, square, heart, diamond, dice,
       clipboard, checkmark, checkmarkDone, statsChart, storefront, bag, menu, save, saveOutline, saveSharp, checkmarkDoneCircleOutline})
@@ -84,14 +97,18 @@ export class Tab4Page {
       }
 
   /* -------------------------------------------------*/
-  /* CHARACTER SAVE AND LOAD                          */
+  /* CHARACTER SAVE LOAD AND DELETE                   */
   /* -------------------------------------------------*/
   loadCharacterView = false;
-  
+
+  setResult(event: CustomEvent<OverlayEventDetail>, id:string) {
+    this.deleteCharacter(id);
+  }
+
   toggleLoadCharacterView() {
     this.loadAll();
     this.goToLoad();
-    console.log(this.character.stats)
+    this.view = 'load';
   }
 
   async save() {
@@ -99,7 +116,7 @@ export class Tab4Page {
     this.character.createdAt ??= Date.now();
     this.character.updatedAt = Date.now();
     await this.characterStorage.saveCharacter(this.character);
-    console.log('Character saved:', this.character.id);
+    console.log('Character saved:', this.character);
   }
 
   async loadAll() {
@@ -112,11 +129,15 @@ export class Tab4Page {
       const clone = structuredClone(loaded);
       this.character = clone;
       this.characterState.setCharacter(clone);
+      this.loadCharacterView = true;
     }
-  }
+  }  
 
+  async deleteCharacter(id: string) {
+    const deleted = await this.characterStorage.deleteCharacter(id);
+  }
      
-  /* ------------------------------------------------ */
+  /* ------------------------------------------------ */  
   /* STATE                                            */
   /* ------------------------------------------------ */
 
@@ -154,6 +175,23 @@ export class Tab4Page {
     'Warlock': 11,
     'Wizard': 12
   }
+
+  /* ------------------------------------------------ */
+  /* SPELL                                            */
+  /* ------------------------------------------------ */
+
+  classSpellList:object[] = []
+
+  buildClassSpellList() {
+    this.classSpellList = this.spells.filter(spell =>
+      spell.class.includes(this.selectedClass)
+    );
+    console.log(this.classSpellList)
+  }
+
+
+
+
   /* ------------------------------------------------ */
   /* RACE                                             */
   /* ------------------------------------------------ */
@@ -352,6 +390,7 @@ export class Tab4Page {
   /* ------------------------------------------------ */
   /* NAVIGATION                                       */
   /* ------------------------------------------------ */
+  view: CreationStep = 'load';
 
   changeTitle(){
     if (this.currentStep === 'load') {
@@ -375,48 +414,19 @@ export class Tab4Page {
     }
   }
 
-  clearState() {
-    this.selectedName = '';
-    this.selectedLevel = 1;
-    this.selectedClass = '';
-    this.selectedRace = '';
-    this.selectedBackground = '';
-    this.selectedFirstBgStat = '';
-    this.selectedSecondBgStat = '';
-    this.selectedBackgroundProf = [];
-  }
 
   startCharacterCreation() {
-  const fresh = {
-    id: crypto.randomUUID(),
-    name: '',
-    level: 1, 
-    class: '',
-    race: '',
-    background: '',
-    stats: [
-      { name: 'Strength', value: 8, modifier: 0, skills: [] },
-      { name: 'Dexterity', value: 8, modifier: 0, skills: [] },
-      { name: 'Constitution', value: 8, modifier: 0, skills: [] },
-      { name: 'Intelligence', value: 8, modifier: 0, skills: [] },
-      { name: 'Wisdom', value: 8, modifier: 0, skills: [] },
-      { name: 'Charisma', value: 8, modifier: 0, skills: [] },
-    ],
-    spells: {} as Spells,
-    proficiencies: [],
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
-  };
+  const fresh = this.characterDataService.getCharacter();
+    fresh.id = crypto.randomUUID();
     this.character = fresh;
     this.characterState.setCharacter(fresh);
-    this.clearState();
     this.selectedBackgroundProf = [];
     this.router.navigate(['/tabs/tab4']).then(() => {
       this.currentStep = 'name';
     });
   }
-  goToLoad() { this.currentStep = 'load'; } 
-  goToMenu() { this.currentStep = 'menu'; }
+  goToLoad() { this.currentStep = 'load'; this.loadCharacterView= false; } 
+  goToMenu() { this.currentStep = 'menu'}
   goToName() { this.currentStep = 'name'; } 
   goToClass() { this.currentStep = 'class';}
   goToRace() { this.currentStep = 'race'; }
@@ -440,6 +450,7 @@ export class Tab4Page {
     this.character.level = value;}   
 
   onClassChange(event: any) {
+    this.buildClassSpellList();
     const value = event.detail.value;
     this.selectedClass = value;
     this.classIndex = this.classKeys.indexOf(value);
@@ -471,12 +482,97 @@ export class Tab4Page {
     this.goToSummary();
     
   }
+ /* ------------------------------------------------ */
+  /* PARSERS                                          */
+  /* ------------------------------------------------ */
+
+  parseComponents(components: any): string[] {
+  const result: string[] = [];
+
+  if (components.v) result.push('V');
+  if (components.s) result.push('S');
+  if (components.m) result.push(`M (${components.m})`);
+
+  return result;
+}
+
+parseEntries(entries: any[]): string[] {
+  const result: string[] = [];
+
+  for (const entry of entries) {
+    if (typeof entry === 'string') {
+      result.push(entry);
+    } else if (entry.type === 'list' && entry.items) {
+      result.push(...entry.items);
+    }
+  }
+
+  return result;
+}
+
+parseClasses(classList: any[]): string[] {
+  const result: string[] = [];
+  const result2: string[] = [];
+  for (const classes of classList) {
+    if (typeof classes.name === 'string') {
+      result.push(classes.name);
+    } else if (classes.type === 'list' && classes.items){
+      result2.push(classes.type);
+    }
+  }
+  return result;
+}
+
+  /* ------------------------------------------------ */
+  /* BUILD SPELLS LIST                                */
+  /* ------------------------------------------------ */
+  classSpellName:string[][] = [];
+
+  BuildclassSpellName() {
+    this.classSpellName = Object.values(classSpellNameJson.XPHB).map(
+      value => this.parseClasses(value.class)
+    );
+  }
+
+
+  isConcentration(duration: any[]): boolean {
+    if (!Array.isArray(duration)) return false;
+
+    return duration.some(d => d.concentration === true);
+  }
+
+  BuildSpells() {
+    this.spells = spellNameJson.spells.map((s, index) => ({
+      id: index.toString(),
+      name: s.name,
+      level: s.level,
+      school: s.school,
+      concentration: this.isConcentration(s.duration),
+      class: this.classSpellName[index], // string[]      
+      components: this.parseComponents(s.components),
+      description: this.parseEntries(s.entries), 
+      range_area: s.range?.type ?? '',
+      attack_save: s.range?.type ?? s.savingThrow ?? '',
+      duration: Array.isArray(s.duration) ? s.duration.join(', ') : s.duration,
+      casting_time: s.time?.[0]
+        ? `${s.time[0].number} ${s.time[0].unit}`
+        : '',
+    }));
+  }
+
 
   /* ------------------------------------------------ */
   /* INIT DATA MAPS                                   */
   /* ------------------------------------------------ */
 
-  ngOnInit() {
+  ngOnInit() {    
+    this.BuildclassSpellName();
+    this.BuildSpells();
+
+    this.route.queryParams.subscribe(params => {
+      this.view = params['currentStep'] ?? 'menu';
+    });
+
     for (const cls of this.classKeys) {
       this.classData[cls] = {
         src: `/assets/class/${cls}.png`,

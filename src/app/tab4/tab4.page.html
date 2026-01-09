@@ -10,6 +10,9 @@
     <ion-button size="large" id="editCharacterButton" (click)="goToName()">
       <ion-icon slot="icon-only" src="assets/buttons/editcharacter.svg"></ion-icon>
     </ion-button>
+    <ion-button size="large" id="deleteCharacterButton" (click)="toggleLoadCharacterView()">
+      <ion-icon slot="icon-only" src="assets/buttons/deletecharacter.svg"></ion-icon>
+    </ion-button>
       <ion-button size="large" id="newCharacterButton" fill="clear" (click)="startCharacterCreation()">
         <ion-icon slot="icon-only" src='assets/buttons/newcharacter.svg'></ion-icon>
       </ion-button>
@@ -18,17 +21,34 @@
 </ion-header>
 
 <ion-content>
-
-
     <!-- Menu -->
-  <ng-container [ngSwitch]="currentStep">   
+  <ng-container [ngSwitch]="currentStep">
+    @if (loadCharacterView) {
+    <ng-container *ngSwitchCase="'menu'">
+      <ion-card tag='CCCard'>
+        <ion-img tag='CCImage' [src]="classData[character.class].src"></ion-img>
+        <ion-card-content tag="CCDescription">
+         Name: {{character.name}} <br> Class: {{character.class}} <br> Level: {{ character.level}} <br> Background: {{character.background}}
+        </ion-card-content>
+      </ion-card>
+    </ng-container>}
+    <!-- Load Character Screen -->   
     <ng-container *ngSwitchCase="'load'">
-    <!-- Load Character Screen -->
+    
       <ion-list *ngFor="let char of characters">
         <ion-item>
           <ion-label>{{ char.name }}</ion-label>
-          <ion-button size="large" fill="clear" id="savename" (click)="loadCharacter(char.id)" (click)="goToName()" (click)="clearState()">
+          <ion-button size="large" fill="clear" id="savename" (click)="loadCharacter(char.id)" (click)="goToMenu()">
             <ion-icon slot="icon-only" src="assets/buttons/load.svg"></ion-icon>
+          </ion-button>
+          <ion-button size="large" fill="clear" id="present-alert">
+            <ion-icon slot="icon-only" src="assets/buttons/deletecharacter.svg"></ion-icon>
+            <ion-alert 
+            trigger="present-alert" 
+            header="Are you sure you want to delete [char.name]?" 
+            message="This cannot be undone" 
+            [buttons]="alertButtons"
+            (didDismiss)="setResult($event, char.id)"></ion-alert>
           </ion-button>
         </ion-item>
       </ion-list>
@@ -93,6 +113,12 @@
         <ion-icon slot="icon-only" src='assets/buttons/next.svg'></ion-icon>
       </ion-button>
     </ng-container>
+
+    <!-- Spells Selection -->
+     <ng-container *ngSwitchCase="spells">
+
+      
+     </ng-container>
 
 
     <!-- Race Selection -->

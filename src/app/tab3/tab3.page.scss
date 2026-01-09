@@ -1,58 +1,106 @@
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Sticky header */
+.table-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--ion-background-color-step-300);
+}
+
+/* Scroll container */
+.table-body {
+  overflow-y: auto;
+  flex: 1;
+  position: relative;
+  top: 2px;
+}
+ion-grid {
+    padding-inline-start: 0;
+}
+
+
 ion-col {
     --min-height: 10px;
 }
 
 ion-row {
-    padding: 2px;
     width: 450px;
-}
+    justify-content: left;
+    
+    }
 
 ion-col {
     &#fullList{
+        margin-bottom: 2px;
         position: relative;
-        top: 20px;
         font-size: 9px;
-        padding: 2px;
-        color: goldenrod;
-    }
-    &#results{
-        min-height: 15px;
-        position: relative;
-        font-size: 8px;
-        font-size: 12px;
-        padding: 0;
-        color:goldenrod;
+        color: var(--ion-text-color);
     }
     &#concentration{
         font-size: 10px;
     }
-    &#name {
-        background-color: rgb(16, 14, 14);
-        border-bottom: 1px solid #65541b;
-        position: fixed;
-        font-size: 10px;
+    &#name{
+        left: 15px;
+        position: relative;
     }
     &#level {
-        background-color: rgb(16, 14, 14);
-        border-bottom: 1px solid #65541b;
-        position: fixed;
-        left: 30%;
-        font-size: 10px;
-    }
+        left: 15px;
+        position: relative;
+}
     &#school {
-        background-color: rgb(16, 14, 14);
-        border-bottom: 1px solid #65541b;
-        position: fixed;
-        left: 44%;
-        font-size: 10px;
+        left: 15px;
+        position: relative;
     }
     &#concentration {
-        background-color: rgb(16, 14, 14);
-        border-bottom: 1px solid #65541b;
-        position: fixed;
-        right: -1%;
-        font-size: 10px;
-        text-align: center;
+        position: relative;
+        left: 15px;
+    }
+}
+
+
+ion-button {
+    &#name {
+        --background: var(--ion-background-color-step-700);
+        font-size: 5px;
+        --color: var(--ion-text-color-step-900)
+    }
+    &#level {
+        --background: var(--ion-background-color-step-700);
+        --color: var(--ion-text-color-step-900);
+        font-size: 5px;
+    }
+    &#school {
+        --background: var(--ion-background-color-step-700);
+        --color: var(--ion-text-color-step-900);
+        font-size: 5px;
+    }
+    &#concentration {
+        font-size: 5px;
+        --color: var(--ion-text-color-step-900);
+        --background: var(--ion-background-color-step-700);
+    }
+    &#addSpell {
+        font-size: 4px;
+        --background: none;
+        --box-shadow: none;
+        --color: var(--ion-text-color);
+        min-height: 1px;
+        min-width: 1px;
+    }
+    &#saveButton {
+        --background: var(--ion-background-color-step-500);
+        width: 50px;
+        font-size: 6px;
+    }
+    &#loadButton {
+        --background: var(--ion-background-color-step-500);
+        width: 50px;
+        font-size: 6px;
     }
 }
 

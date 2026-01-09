@@ -1,4 +1,4 @@
-import { Spells} from "./spells.model";
+import { Spell} from "./spell.model";
 
 export interface SkillStat {
     name: string;
@@ -23,7 +23,7 @@ export interface Character {
   background: string;
   stats: CharacterStat[];
   proficiencies: string[];
-  spells: Spells;
+  spells: Spell[];
   createdAt: number;
   updatedAt: number;
 }

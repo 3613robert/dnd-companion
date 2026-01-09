@@ -1,5 +1,5 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, EnvironmentInjector, inject } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonMenu, IonButtons, IonButton, IonSelectOption, IonSelect} from '@ionic/angular/standalone';
+import { IonAlert, IonHeader, IonToolbar, IonTitle, IonContent, IonMenu, IonButtons, IonButton, IonSelectOption, IonSelect} from '@ionic/angular/standalone';
 import { triangle, ellipse, square, heart, diamond, dice, clipboard, statsChart, storefrontSharp, storefront, bag, menu, keyOutline, keySharp} from 'ionicons/icons';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
@@ -10,6 +10,7 @@ import { CharacterDataService } from 'src/services/characterdata.service';
 import { Character } from 'src/models/character.model';
 import { CharacterStorageService } from '../services/character-storage';
 import { CharacterState } from '../services/character-state';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab1',
@@ -23,13 +24,15 @@ export class Tab1Page {
   public environmentInjector = inject(EnvironmentInjector)
   character!: Character; 
   characters: Character[] = [];
+  alertButtons = ['Yes'];  
 
   constructor(
+    private router: Router,
     private characterDataService: CharacterDataService,
     private characterStorage: CharacterStorageService,
     private characterState: CharacterState) {
-    addIcons({ triangle, ellipse, square, heart, diamond, dice, clipboard, statsChart, storefront, bag, menu})
-    this.character = characterDataService.getCharacter()}
+    this.character = this.characterDataService.getCharacter();
+    }
   
 /* -------------------------------------------------*/
 /* CHARACTER SAVE AND LOAD                          */
@@ -57,6 +60,11 @@ async loadCharacter(id: string) {
   }
 }
 
+goToLoad() {
+  this.router.navigate(['/tabs/tab4'], {
+    queryParams: { view: 'load' }
+  });
+}
     
 /* ------------------------------------------------ */
 /* DiceRoller Logic                                 */
@@ -145,8 +153,6 @@ showPlus(skill:string, stat:number, x:number) {
 }
 
 showCharOverview = false;
-
-
 
 toggleProficiencies() {
   Object.entries(this.character.stats).forEach(([key, value]) => {

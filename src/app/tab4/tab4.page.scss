@@ -96,7 +96,18 @@ ion-button {
         --box-shadow: none;
         margin-right: 5px;
     }
-}
+    &#deleteCharacterButton {
+        --color: orange;
+        --background: none;
+        --box-shadow: none;
+        margin-right: 5px;}
+    
+    &#present-alert{
+        --color: orange;
+        --background: none;
+        --box-shadow: none;
+        margin-right: 5px;}
+    }
 ion-card-text {
     justify-content: center;
 }
@@ -128,9 +139,5 @@ ion-card-header {
 [tag=CCImage] {
     max-width: 500px;
     max-height: 500px;
-}
-
-[tag=saveCC] {
-
 }
 

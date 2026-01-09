@@ -1,35 +1,72 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-searchbar (ionInput)="handleInput($event)" style="width: 70%" ></ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-button size="small" id="saveButton" (click)="save()">Save Character</ion-button>
+      <ion-button size="small" id="loadButton" (click)="goToLoad()">
+        Load Character
+      </ion-button>
+    </ion-buttons>
+    <ion-searchbar (ionInput)="handleInput($event)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header>
-    <ion-grid>
-      <ion-row id="header">
-        <ion-col class="ion-row-indented" size="4" id="name">Name</ion-col>
-        <ion-col class="ion-row-indented" size="2" id="level">Level</ion-col>
-        <ion-col class="ion-row-indented" size="3" id="school">School</ion-col>
-        <ion-col class="ion-row-indented" size="4" id="concentration" offset="left">Concentration</ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-header>
+  </ion-header>  
+  <div class="table-wrapper">
       <ion-grid>
-      @for (spell of spells; track spell.name){
-      <ion-row id="fullList">
-        <ion-col class="ion-col-indented" id="fullList" size="3"> {{spell.name}}</ion-col>
-        <ion-col class="ion-col-indented" id="fullList" size="1"> {{spell.level}} </ion-col>
-        <ion-col class="ion-col-indented" id="fullList" size="3"> {{spell.school}}</ion-col>
-        <ion-col class="ion-col-indented" id="fullList" size="1" *ngIf="spell.concentration" >⚠ (C)</ion-col>
-      </ion-row>}
+        <div class="table-header">
+          <ion-row id="header">
+            <ion-col class="ion-row-indented" size="3" id="name">
+              <ion-button id="name" size="small" (click)="sortSpellList('name')">Name</ion-button>
+              <span class="sortorder" *ngIf="sortProperty === 'name'" [class.reverse]="sortDirection === 'desc'"></span>
+            </ion-col>
+            <ion-col class="ion-row-indented" size="1" id="level">
+              <ion-button id="level" size="small" (click)="sortSpellList('level')" >Level</ion-button>
+              <span class="sortorder" *ngIf="sortProperty === 'level'" [class.reverse]="sortDirection === 'desc'"></span>
+            </ion-col>
+            <ion-col class="ion-row-indented" size="2" id="school">
+              <ion-button id="school" size="small" (click)="sortSpellList('school')">School</ion-button>
+            </ion-col>
+            <ion-col class="ion-row-indented" size="1" id="concentration" offset="left">
+              <ion-button id="concentration" size="small" (click)="sortSpellList('concentration')">Concentration</ion-button>
+            </ion-col>
+          </ion-row>
+        </div> 
+      @if (results.length === 0){
+        <div class="table-body">
+        @for (spell of spells; track spell.name){
+          <ion-row id="fullList">
+            @if (!spellInList(spell)){
+            <ion-button id="addSpell" (click)="addSpell(spell)">
+              <ion-icon slot="icon-only" name="add"></ion-icon>
+            </ion-button>
+            } 
+            @if (spellInList(spell)) {
+            <ion-button id="addSpell" (click)="removeSpell(spell)">
+              <ion-icon slot="icon-only" src="assets/buttons/minus.svg"></ion-icon>
+            </ion-button>
+            }
+            <ion-col class="ion-col-indented" id="fullList" size="3"> {{spell.name}}</ion-col>
+            <ion-col class="ion-col-indented" id="fullList" size="1"> {{spell.level}} </ion-col>
+            <ion-col class="ion-col-indented" id="fullList" size="2"> {{spell.school}}</ion-col>
+            <ion-col class="ion-col-indented" id="fullList" size="1" *ngIf="spell.concentration" >⚠ (C)</ion-col>
+          </ion-row>}
+      </div>}
+    @if (results.length != 0){
+      <div class="table-body">
+      @for (spell of results; track spell.name) {
+        <ion-row id="fullList">
+          <ion-button id="addSpell" (click)="addSpell(spell)">
+              <ion-icon slot="icon-only" name="add"></ion-icon>
+          </ion-button>
+          <ion-col class="ion-col-indented" id="fullList" size="3"> {{spell.name}}</ion-col>
+          <ion-col class="ion-col-indented" id="fullList" size="1"> {{spell.level}} </ion-col>
+          <ion-col class="ion-col-indented" id="fullList" size="2"> {{spell.school}}</ion-col>
+          <ion-col class="ion-col-indented" id="fullList" size="1" *ngIf="spell.concentration" >⚠ (C)</ion-col>
+        </ion-row>}
+    </div>} 
     </ion-grid>
-  <ion-list>
-  @for (spell of results; track spell.name) {
-    <ion-item class="ion-item-indented" id="results">
-        <p id="results">{{ spell.name }} · Level {{ spell.level }} · {{ spell.school }} · </p> <p &nbsp id="concentration" *ngIf="spell.concentration"> ⚠ (C)</p>
-    </ion-item>
-  }
-</ion-list>
+  </div>
   <app-explore-container name="Tab 3 page"></app-explore-container>
 </ion-content>
